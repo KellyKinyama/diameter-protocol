@@ -1,7 +1,7 @@
 // lib/applications/base/re_auth.dart
 
-import '../../core/diameter_message.dart';
-import '../../core/avp_dictionary3.dart';
+import '../../core/diameter_message2.dart';
+import '../../core/avp_dictionary.dart';
 
 class ReAuthRequest extends DiameterMessage {
   ReAuthRequest({

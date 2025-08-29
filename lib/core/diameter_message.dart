@@ -2,6 +2,9 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:io';
+
+import 'package:diameter_protocol/core/avp_dictionary.dart';
 
 class DiameterMessage {
   // --- Header Flags ---
@@ -95,9 +98,15 @@ class DiameterMessage {
     // Header
     var headerByteData = ByteData(20);
     headerByteData.setUint8(0, version);
-    headerByteData.setUint32(0, (headerByteData.getUint32(0) & 0xFF000000) | length);
+    headerByteData.setUint32(
+      0,
+      (headerByteData.getUint32(0) & 0xFF000000) | length,
+    );
     headerByteData.setUint8(4, flags);
-    headerByteData.setUint32(4, (headerByteData.getUint32(4) & 0xFF000000) | commandCode);
+    headerByteData.setUint32(
+      4,
+      (headerByteData.getUint32(4) & 0xFF000000) | commandCode,
+    );
     headerByteData.setUint32(8, applicationId);
     headerByteData.setUint32(12, hopByHopId);
     headerByteData.setUint32(16, endToEndId);
@@ -127,7 +136,7 @@ class DiameterMessage {
     final avpStrings = avps.map((avp) => '    $avp').join('\n');
     return 'Diameter Message:\n'
         '  Version: $version, Length: $length, Flags: 0x${flags.toRadixString(16)}\n'
-        '  Command Code: $commandCode, Application ID: $applicationId\n'
+        '  Command Code: ${COMMANDS[commandCode]}, Application ID: $applicationId\n'
         '  Hop-by-Hop ID: 0x${hopByHopId.toRadixString(16)}\n'
         '  End-to-End ID: 0x${endToEndId.toRadixString(16)}\n'
         '  AVPs:\n$avpStrings';
@@ -146,7 +155,7 @@ class AVP {
     required this.data,
     this.vendorId = 0,
   });
-  
+
   // Helper factories for creating AVPs with correct types
   factory AVP.fromString(int code, String value) {
     return AVP(code: code, data: utf8.encode(value) as Uint8List);
@@ -161,6 +170,16 @@ class AVP {
     return AVP.fromUnsigned32(code, value);
   }
 
+  factory AVP.fromAddress(int code, String ipAddress) {
+    var rawAddress = InternetAddress(ipAddress).rawAddress;
+    var data = Uint8List(2 + rawAddress.length);
+    var byteData = ByteData.view(data.buffer);
+    // Address Family (1 for IPv4, 2 for IPv6)
+    byteData.setUint16(0, rawAddress.length == 4 ? 1 : 2);
+    data.setRange(2, data.length, rawAddress);
+    return AVP(code: code, data: data);
+  }
+
   factory AVP.decode(Uint8List rawAvp) {
     var byteData = ByteData.view(rawAvp.buffer);
     final code = byteData.getUint32(0);
@@ -169,11 +188,12 @@ class AVP {
 
     int offset = 8;
     int vendorId = 0;
-    if ((flags & 0x80) != 0) { // Vendor-Specific bit is set
+    if ((flags & 0x80) != 0) {
+      // Vendor-Specific bit is set
       vendorId = byteData.getUint32(8);
       offset = 12;
     }
-    
+
     final data = rawAvp.sublist(offset, length);
     return AVP(code: code, flags: flags, data: data, vendorId: vendorId);
   }
@@ -196,7 +216,7 @@ class AVP {
     final paddedLength = getPaddedLength();
     final buffer = Uint8List(paddedLength);
     final byteData = ByteData.view(buffer.buffer);
-    
+
     byteData.setUint32(0, code);
     byteData.setUint8(4, flags | (vendorId != 0 ? 0x80 : 0));
     byteData.setUint32(4, (byteData.getUint32(4) & 0xFF000000) | length);
@@ -206,26 +226,24 @@ class AVP {
       byteData.setUint32(8, vendorId);
       offset = 12;
     }
-    
+
     buffer.setRange(offset, offset + data.length, data);
-    
+
     return buffer;
   }
 
   @override
   String toString() {
-    // Attempt to decode common types for readability
     String valueStr;
     try {
       if (data.length == 4) {
         valueStr = 'Unsigned32(${ByteData.view(data.buffer).getUint32(0)})';
       } else {
-        // Try UTF8, fall back to raw bytes
         valueStr = 'UTF8String("${utf8.decode(data)}")';
       }
     } catch (_) {
       valueStr = 'OctetString(${data.toString()})';
     }
-    return 'AVP(Code: $code, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
+    return 'AVP(Code: ${COMMANDS[code]}, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
   }
 }

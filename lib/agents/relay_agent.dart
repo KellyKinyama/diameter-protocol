@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import '../applications/session_management3.dart';
+import '../applications/session_management.dart';
 
 import '../core/diameter_message.dart';
 import '../core/avp_dictionary.dart';

@@ -2,8 +2,8 @@
 
 import 'dart:io';
 import 'dart:async';
-import 'diameter_message.dart';
-import '../applications/session_management3.dart';
+import 'diameter_message2.dart';
+import '../applications/session_management.dart';
 
 class DiameterServer {
   final String host;
@@ -39,7 +39,6 @@ class DiameterServer {
             '<< Received Request from ${socket.remoteAddress.address}:\n$request',
           );
 
-          // Let the session manager handle the logic and create a response
           final response = sessionManager.handleRequest(request);
 
           print(
@@ -48,7 +47,6 @@ class DiameterServer {
           socket.add(response.encode());
         } catch (e) {
           print('Error processing message: $e');
-          // In a real implementation, you might send a Diameter error message
         }
       },
       onError: (error) {

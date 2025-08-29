@@ -1,19 +1,14 @@
 // lib/applications/base/disconnect_peer.dart
 
-// lib/applications/base/disconnect_peer.dart
-
 import '../../core/diameter_message.dart';
-import '../../core/avp_dictionary2.dart';
+import '../../core/avp_dictionary.dart';
 
-/// Creates a Disconnect-Peer-Request (DPR) message.
-/// See RFC 6733 Section 5.4.1 for details.
 class DisconnectPeerRequest extends DiameterMessage {
   DisconnectPeerRequest({
     required String originHost,
     required String originRealm,
     int disconnectCause = 0, // 0 = REBOOTING
   }) : super(
-         // Calculate length and call the main super() constructor
          length:
              20 +
              [

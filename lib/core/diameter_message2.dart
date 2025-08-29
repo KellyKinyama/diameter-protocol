@@ -3,6 +3,21 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
+import 'avp_dictionary.dart';
+
+// A simple map for pretty printing command codes in the toString() method.
+const COMMANDS = {
+  257: "Capabilities-Exchange",
+  280: "Device-Watchdog",
+  272: "Credit-Control",
+  271: "Accounting",
+  275: "Session-Termination",
+  282: "Disconnect-Peer",
+  258: "Re-Auth",
+  274: "Abort-Session",
+  316: "Update-Location",
+  318: "Authentication-Information",
+};
 
 class DiameterMessage {
   // --- Header Flags ---
@@ -96,9 +111,15 @@ class DiameterMessage {
     // Header
     var headerByteData = ByteData(20);
     headerByteData.setUint8(0, version);
-    headerByteData.setUint32(0, (headerByteData.getUint32(0) & 0xFF000000) | length);
+    headerByteData.setUint32(
+      0,
+      (headerByteData.getUint32(0) & 0xFF000000) | length,
+    );
     headerByteData.setUint8(4, flags);
-    headerByteData.setUint32(4, (headerByteData.getUint32(4) & 0xFF000000) | commandCode);
+    headerByteData.setUint32(
+      4,
+      (headerByteData.getUint32(4) & 0xFF000000) | commandCode,
+    );
     headerByteData.setUint32(8, applicationId);
     headerByteData.setUint32(12, hopByHopId);
     headerByteData.setUint32(16, endToEndId);
@@ -126,9 +147,10 @@ class DiameterMessage {
   @override
   String toString() {
     final avpStrings = avps.map((avp) => '    $avp').join('\n');
+    final commandName = COMMANDS[commandCode] ?? commandCode.toString();
     return 'Diameter Message:\n'
         '  Version: $version, Length: $length, Flags: 0x${flags.toRadixString(16)}\n'
-        '  Command Code: $commandCode, Application ID: $applicationId\n'
+        '  Command Code: $commandName, Application ID: $applicationId\n'
         '  Hop-by-Hop ID: 0x${hopByHopId.toRadixString(16)}\n'
         '  End-to-End ID: 0x${endToEndId.toRadixString(16)}\n'
         '  AVPs:\n$avpStrings';
@@ -138,17 +160,26 @@ class DiameterMessage {
 class AVP {
   final int code;
   final int flags;
-  final Uint8List data;
   final int vendorId;
+
+  // An AVP will have EITHER data (for simple AVPs) OR a list of inner avps (for grouped AVPs).
+  final Uint8List? data;
+  final List<AVP>? avps;
 
   AVP({
     required this.code,
     this.flags = 0,
-    required this.data,
+    this.data,
+    this.avps,
     this.vendorId = 0,
-  });
-  
-  // Helper factories for creating AVPs with correct types
+  }) {
+    // An AVP must have data or nested AVPs, but not both.
+    if (data == null && avps == null) {
+      throw ArgumentError('AVP must have either data or nested avps.');
+    }
+  }
+
+  // --- Helper Factories ---
   factory AVP.fromString(int code, String value) {
     return AVP(code: code, data: utf8.encode(value) as Uint8List);
   }
@@ -162,7 +193,7 @@ class AVP {
     return AVP.fromUnsigned32(code, value);
   }
 
-   factory AVP.fromAddress(int code, String ipAddress) {
+  factory AVP.fromAddress(int code, String ipAddress) {
     var rawAddress = InternetAddress(ipAddress).rawAddress;
     var data = Uint8List(2 + rawAddress.length);
     var byteData = ByteData.view(data.buffer);
@@ -170,6 +201,11 @@ class AVP {
     byteData.setUint16(0, rawAddress.length == 4 ? 1 : 2);
     data.setRange(2, data.length, rawAddress);
     return AVP(code: code, data: data);
+  }
+
+  // New factory specifically for creating Grouped AVPs
+  factory AVP.fromGrouped(int code, List<AVP> avps) {
+    return AVP(code: code, avps: avps);
   }
 
   factory AVP.decode(Uint8List rawAvp) {
@@ -180,21 +216,24 @@ class AVP {
 
     int offset = 8;
     int vendorId = 0;
-    if ((flags & 0x80) != 0) { // Vendor-Specific bit is set
+    if ((flags & 0x80) != 0) {
+      // Vendor-Specific bit is set
       vendorId = byteData.getUint32(8);
       offset = 12;
     }
-    
+
     final data = rawAvp.sublist(offset, length);
     return AVP(code: code, flags: flags, data: data, vendorId: vendorId);
   }
 
   int getLength() {
-    int length = 8 + data.length; // 8 bytes for header
-    if (vendorId != 0) {
-      length += 4;
+    int headerLength = vendorId != 0 ? 12 : 8;
+    if (data != null) {
+      return headerLength + data!.length;
     }
-    return length;
+    // For grouped AVP, sum the padded lengths of inner AVPs
+    return headerLength +
+        (avps?.fold(0, (sum, avp) => sum! + avp.getPaddedLength()) ?? 0);
   }
 
   int getPaddedLength() {
@@ -207,7 +246,7 @@ class AVP {
     final paddedLength = getPaddedLength();
     final buffer = Uint8List(paddedLength);
     final byteData = ByteData.view(buffer.buffer);
-    
+
     byteData.setUint32(0, code);
     byteData.setUint8(4, flags | (vendorId != 0 ? 0x80 : 0));
     byteData.setUint32(4, (byteData.getUint32(4) & 0xFF000000) | length);
@@ -217,24 +256,47 @@ class AVP {
       byteData.setUint32(8, vendorId);
       offset = 12;
     }
-    
-    buffer.setRange(offset, offset + data.length, data);
-    
+
+    // Encode either simple data or the concatenated bytes of inner AVPs
+    if (data != null) {
+      buffer.setRange(offset, offset + data!.length, data!);
+    } else if (avps != null) {
+      int currentOffset = offset;
+      for (final avp in avps!) {
+        final encodedAvp = avp.encode();
+        buffer.setRange(
+          currentOffset,
+          currentOffset + encodedAvp.length,
+          encodedAvp,
+        );
+        currentOffset += encodedAvp.length;
+      }
+    }
+
     return buffer;
   }
 
   @override
   String toString() {
+    // Attempt to decode common types for readability
     String valueStr;
     try {
-      if (data.length == 4) {
-        valueStr = 'Unsigned32(${ByteData.view(data.buffer).getUint32(0)})';
+      if (data != null) {
+        if (data!.length == 4) {
+          valueStr = 'Unsigned32(${ByteData.view(data!.buffer).getUint32(0)})';
+        } else {
+          valueStr = 'UTF8String("${utf8.decode(data!)}")';
+        }
+      } else if (avps != null) {
+        final innerAvps = avps!.map((a) => '\n        $a').join('');
+        valueStr = 'Grouped [$innerAvps\n    ]';
       } else {
-        valueStr = 'UTF8String("${utf8.decode(data)}")';
+        valueStr = 'Empty';
       }
     } catch (_) {
       valueStr = 'OctetString(${data.toString()})';
     }
-    return 'AVP(Code: $code, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
+    final avpName = COMMANDS[code] ?? code.toString();
+    return 'AVP(Code: $avpName, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
   }
 }

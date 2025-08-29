@@ -2,7 +2,7 @@
 
 import 'package:diameter_protocol/agents/relay_agent.dart';
 import 'package:diameter_protocol/agents/proxy_agent.dart';
-import 'package:diameter_protocol/applications/session_management3.dart';
+import 'package:diameter_protocol/applications/session_management.dart';
 
 void main() async {
   // The final destination server

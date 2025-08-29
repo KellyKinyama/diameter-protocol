@@ -1,7 +1,7 @@
 // lib/applications/base/accounting.dart
 
 import '../../core/diameter_message.dart';
-import '../../core/avp_dictionary3.dart';
+import '../../core/avp_dictionary.dart';
 
 /// Creates an Accounting-Request (ACR) message.
 /// See RFC 6733 Section 9.7.1 for details.

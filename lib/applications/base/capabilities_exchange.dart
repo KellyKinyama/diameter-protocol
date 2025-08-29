@@ -1,10 +1,9 @@
 // lib/applications/base/capabilities_exchange.dart
 
 import 'dart:io';
-import '../../core/diameter_message.dart';
+import '../../core/diameter_message2.dart';
 import '../../core/avp_dictionary.dart';
 
-// Class definition for CapabilitiesExchangeRequest remains the same...
 class CapabilitiesExchangeRequest extends DiameterMessage {
   CapabilitiesExchangeRequest({
     required String originHost,
@@ -19,10 +18,7 @@ class CapabilitiesExchangeRequest extends DiameterMessage {
              [
                AVP.fromString(AVP_ORIGIN_HOST, originHost),
                AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-               AVP(
-                 code: AVP_HOST_IP_ADDRESS,
-                 data: InternetAddress(hostIpAddress).rawAddress,
-               ),
+               AVP.fromAddress(AVP_HOST_IP_ADDRESS, hostIpAddress),
                AVP.fromUnsigned32(AVP_VENDOR_ID, vendorId),
                AVP.fromString(AVP_PRODUCT_NAME, productName),
                AVP.fromUnsigned32(AVP_FIRMWARE_REVISION, firmwareRevision),
@@ -40,10 +36,7 @@ class CapabilitiesExchangeRequest extends DiameterMessage {
          avps: [
            AVP.fromString(AVP_ORIGIN_HOST, originHost),
            AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-           AVP(
-             code: AVP_HOST_IP_ADDRESS,
-             data: InternetAddress(hostIpAddress).rawAddress,
-           ),
+           AVP.fromAddress(AVP_HOST_IP_ADDRESS, hostIpAddress),
            AVP.fromUnsigned32(AVP_VENDOR_ID, vendorId),
            AVP.fromString(AVP_PRODUCT_NAME, productName),
            AVP.fromUnsigned32(AVP_FIRMWARE_REVISION, firmwareRevision),
@@ -70,8 +63,6 @@ class CapabilitiesExchangeAnswer extends DiameterMessage {
          avps: avpList,
        );
 
-  /// Creates a CEA in response to a received CER.
-  // FIX: This now accepts the base DiameterMessage type
   factory CapabilitiesExchangeAnswer.fromRequest(
     DiameterMessage cer, {
     required int resultCode,
@@ -82,17 +73,14 @@ class CapabilitiesExchangeAnswer extends DiameterMessage {
     required String productName,
   }) {
     return CapabilitiesExchangeAnswer._(
-      flags: 0, // A CEA is not a request
-      hopByHopId: cer.hopByHopId, // Must match the request
-      endToEndId: cer.endToEndId, // Must match the request
+      flags: 0,
+      hopByHopId: cer.hopByHopId,
+      endToEndId: cer.endToEndId,
       avpList: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, resultCode),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-        AVP(
-          code: AVP_HOST_IP_ADDRESS,
-          data: InternetAddress(hostIpAddress).rawAddress,
-        ),
+        AVP.fromAddress(AVP_HOST_IP_ADDRESS, hostIpAddress),
         AVP.fromUnsigned32(AVP_VENDOR_ID, vendorId),
         AVP.fromString(AVP_PRODUCT_NAME, productName),
         AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, APP_ID_CREDIT_CONTROL),

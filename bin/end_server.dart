@@ -1,7 +1,7 @@
 // bin/end_server.dart
 
 import 'package:diameter_protocol/core/diameter_server.dart';
-import 'package:diameter_protocol/applications/session_management3.dart';
+import 'package:diameter_protocol/applications/session_management.dart';
 
 void main() async {
   print("Starting End Server...");

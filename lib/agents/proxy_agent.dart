@@ -1,6 +1,6 @@
 // lib/agents/proxy_agent.dart
 
-import '../applications/session_management3.dart';
+import '../applications/session_management.dart';
 import '../core/diameter_message.dart';
 import '../core/avp_dictionary.dart';
 import 'relay_agent.dart'; // Inherits forwarding logic

@@ -1,16 +1,13 @@
 // lib/applications/base/watchdog.dart
 
-import '../../core/diameter_message.dart';
+import '../../core/diameter_message2.dart';
 import '../../core/avp_dictionary.dart';
 
-/// Creates a Device-Watchdog-Request (DWR) message.
-/// See RFC 6733 Section 5.5.1 for details.
 class DeviceWatchdogRequest extends DiameterMessage {
   DeviceWatchdogRequest({
     required String originHost,
     required String originRealm,
   }) : super(
-         // Calculate length before calling the main super() constructor
          length:
              20 +
              [
