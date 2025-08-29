@@ -161,8 +161,6 @@ class AVP {
   final int code;
   final int flags;
   final int vendorId;
-
-  // An AVP will have EITHER data (for simple AVPs) OR a list of inner avps (for grouped AVPs).
   final Uint8List? data;
   final List<AVP>? avps;
 
@@ -173,13 +171,11 @@ class AVP {
     this.avps,
     this.vendorId = 0,
   }) {
-    // An AVP must have data or nested AVPs, but not both.
     if (data == null && avps == null) {
       throw ArgumentError('AVP must have either data or nested avps.');
     }
   }
 
-  // --- Helper Factories ---
   factory AVP.fromString(int code, String value) {
     return AVP(code: code, data: utf8.encode(value) as Uint8List);
   }
@@ -197,15 +193,13 @@ class AVP {
     var rawAddress = InternetAddress(ipAddress).rawAddress;
     var data = Uint8List(2 + rawAddress.length);
     var byteData = ByteData.view(data.buffer);
-    // Address Family (1 for IPv4, 2 for IPv6)
     byteData.setUint16(0, rawAddress.length == 4 ? 1 : 2);
     data.setRange(2, data.length, rawAddress);
     return AVP(code: code, data: data);
   }
 
-  // New factory specifically for creating Grouped AVPs
   factory AVP.fromGrouped(int code, List<AVP> avps) {
-    return AVP(code: code, avps: avps);
+    return AVP(code: code, avps: avps, flags: 0x40);
   }
 
   factory AVP.decode(Uint8List rawAvp) {
@@ -217,12 +211,25 @@ class AVP {
     int offset = 8;
     int vendorId = 0;
     if ((flags & 0x80) != 0) {
-      // Vendor-Specific bit is set
       vendorId = byteData.getUint32(8);
       offset = 12;
     }
 
     final data = rawAvp.sublist(offset, length);
+
+    // --- THIS IS THE CRITICAL FIX ---
+    // If the 'M' (Mandatory/Grouped) flag is set, recursively decode the data payload.
+    if ((flags & 0x40) != 0) {
+      List<AVP> innerAvps = [];
+      int innerOffset = 0;
+      while (innerOffset < data.length) {
+        final innerAvp = AVP.decode(data.sublist(innerOffset));
+        innerAvps.add(innerAvp);
+        innerOffset += innerAvp.getPaddedLength();
+      }
+      return AVP(code: code, flags: flags, avps: innerAvps, vendorId: vendorId);
+    }
+
     return AVP(code: code, flags: flags, data: data, vendorId: vendorId);
   }
 
@@ -231,14 +238,13 @@ class AVP {
     if (data != null) {
       return headerLength + data!.length;
     }
-    // For grouped AVP, sum the padded lengths of inner AVPs
     return headerLength +
         (avps?.fold(0, (sum, avp) => sum! + avp.getPaddedLength()) ?? 0);
   }
 
   int getPaddedLength() {
     final length = getLength();
-    return (length + 3) & ~3; // Pad to the next 4-byte boundary
+    return (length + 3) & ~3;
   }
 
   Uint8List encode() {
@@ -257,7 +263,6 @@ class AVP {
       offset = 12;
     }
 
-    // Encode either simple data or the concatenated bytes of inner AVPs
     if (data != null) {
       buffer.setRange(offset, offset + data!.length, data!);
     } else if (avps != null) {
@@ -278,25 +283,24 @@ class AVP {
 
   @override
   String toString() {
-    // Attempt to decode common types for readability
     String valueStr;
     try {
-      if (data != null) {
+      if (avps != null) {
+        final innerAvps = avps!.map((a) => '\n        $a').join('');
+        valueStr = 'Grouped [$innerAvps\n    ]';
+      } else if (data != null) {
         if (data!.length == 4) {
           valueStr = 'Unsigned32(${ByteData.view(data!.buffer).getUint32(0)})';
         } else {
           valueStr = 'UTF8String("${utf8.decode(data!)}")';
         }
-      } else if (avps != null) {
-        final innerAvps = avps!.map((a) => '\n        $a').join('');
-        valueStr = 'Grouped [$innerAvps\n    ]';
       } else {
         valueStr = 'Empty';
       }
     } catch (_) {
       valueStr = 'OctetString(${data.toString()})';
     }
-    final avpName = COMMANDS[code] ?? code.toString();
+    final avpName = AVP_CODE_TO_NAME[code] ?? code.toString();
     return 'AVP(Code: $avpName, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
   }
 }

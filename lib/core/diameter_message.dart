@@ -136,7 +136,7 @@ class DiameterMessage {
     final avpStrings = avps.map((avp) => '    $avp').join('\n');
     return 'Diameter Message:\n'
         '  Version: $version, Length: $length, Flags: 0x${flags.toRadixString(16)}\n'
-        '  Command Code: ${COMMANDS[commandCode]}, Application ID: $applicationId\n'
+        '  Command Code: ${COMMAND_CODE_TO_NAME[commandCode]}, Application ID: $applicationId\n'
         '  Hop-by-Hop ID: 0x${hopByHopId.toRadixString(16)}\n'
         '  End-to-End ID: 0x${endToEndId.toRadixString(16)}\n'
         '  AVPs:\n$avpStrings';
@@ -244,6 +244,6 @@ class AVP {
     } catch (_) {
       valueStr = 'OctetString(${data.toString()})';
     }
-    return 'AVP(Code: ${COMMANDS[code]}, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
+    return 'AVP(Code: ${COMMAND_CODE_TO_NAME[code]}, Flags: 0x${flags.toRadixString(16)}, Length: ${getLength()}, Value: $valueStr)';
   }
 }

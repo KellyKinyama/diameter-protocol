@@ -77,38 +77,38 @@ class DiameterSessionManager {
   }
 
   /// Handles an incoming CCR and returns a CCA for the Gy interface.
-  DiameterMessage _handleCCR(DiameterMessage ccr) {
-    final sessionId = String.fromCharCodes(
-      ccr.getAVP(AVP_SESSION_ID)!.data as List<int>,
-    );
-    final requestNumber = ByteData.view(
-      ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data!.buffer,
-    ).getUint32(0);
-    print(
-      'Gy: Received CCR for session $sessionId (Request Number: $requestNumber)',
-    );
+  // DiameterMessage _handleCCR(DiameterMessage ccr) {
+  //   final sessionId = String.fromCharCodes(
+  //     ccr.getAVP(AVP_SESSION_ID)!.data as List<int>,
+  //   );
+  //   final requestNumber = ByteData.view(
+  //     ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data!.buffer,
+  //   ).getUint32(0);
+  //   print(
+  //     'Gy: Received CCR for session $sessionId (Request Number: $requestNumber)',
+  //   );
 
-    // Correctly create the grouped AVP by encoding its inner AVP first.
-    final gsu = AVP.fromGrouped(AVP_GRANTED_SERVICE_UNIT, [
-      AVP.fromUnsigned32(AVP_CC_TOTAL_OCTETS, 1000000),
-    ]);
+  //   // Correctly create the grouped AVP by encoding its inner AVP first.
+  //   final gsu = AVP.fromGrouped(AVP_GRANTED_SERVICE_UNIT, [
+  //     AVP.fromUnsigned32(AVP_CC_TOTAL_OCTETS, 1000000),
+  //   ]);
 
-    return DiameterMessage.fromFields(
-      commandCode: CMD_CREDIT_CONTROL,
-      applicationId: APP_ID_CREDIT_CONTROL,
-      flags: 0, // This is an Answer
-      hopByHopId: ccr.hopByHopId,
-      endToEndId: ccr.endToEndId,
-      avpList: [
-        ccr.getAVP(AVP_SESSION_ID)!,
-        AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
-        AVP.fromString(AVP_ORIGIN_HOST, originHost),
-        AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-        ccr.getAVP(AVP_CC_REQUEST_NUMBER)!,
-        gsu,
-      ],
-    );
-  }
+  //   return DiameterMessage.fromFields(
+  //     commandCode: CMD_CREDIT_CONTROL,
+  //     applicationId: APP_ID_CREDIT_CONTROL,
+  //     flags: 0, // This is an Answer
+  //     hopByHopId: ccr.hopByHopId,
+  //     endToEndId: ccr.endToEndId,
+  //     avpList: [
+  //       ccr.getAVP(AVP_SESSION_ID)!,
+  //       AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
+  //       AVP.fromString(AVP_ORIGIN_HOST, originHost),
+  //       AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+  //       ccr.getAVP(AVP_CC_REQUEST_NUMBER)!,
+  //       gsu,
+  //     ],
+  //   );
+  // }
 
   DiameterMessage _handleCER(DiameterMessage cer) {
     return CapabilitiesExchangeAnswer.fromRequest(
@@ -208,6 +208,100 @@ class DiameterSessionManager {
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
       ],
+    );
+  }
+
+  /// Handles an incoming CCR and returns a CCA (OCS Function).
+  // DiameterMessage _handleCCR(DiameterMessage ccr) {
+  //   final sessionId = String.fromCharCodes(ccr.getAVP(AVP_SESSION_ID)!.data!);
+  //   final requestNumber = ByteData.view(
+  //     ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data!.buffer,
+  //   ).getUint32(0);
+  //   print(
+  //     'OCS: Received CCR for session $sessionId (Request Number: $requestNumber)',
+  //   );
+
+  //   // For an INITIAL or UPDATE request, grant service units.
+  //   final gsu = AVP.fromGrouped(AVP_GRANTED_SERVICE_UNIT, [
+  //     AVP.fromUnsigned32(AVP_CC_TOTAL_OCTETS, 1000000), // Grant 1MB
+  //   ]);
+
+  //   // According to RFC 4006, units are returned inside a
+  //   // Multiple-Services-Credit-Control AVP if the client supports it.
+  //   final mscc = AVP.fromGrouped(AVP_MULTIPLE_SERVICES_CREDIT_CONTROL, [
+  //     AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
+  //     gsu,
+  //   ]);
+
+  //   return DiameterMessage.fromFields(
+  //     commandCode: CMD_CREDIT_CONTROL,
+  //     applicationId: APP_ID_CREDIT_CONTROL,
+  //     flags: 0, // This is an Answer
+  //     hopByHopId: ccr.hopByHopId,
+  //     endToEndId: ccr.endToEndId,
+  //     avpList: [
+  //       ccr.getAVP(AVP_SESSION_ID)!,
+  //       AVP.fromUnsigned32(
+  //         AVP_RESULT_CODE,
+  //         DIAMETER_SUCCESS,
+  //       ), // Overall result code
+  //       AVP.fromString(AVP_ORIGIN_HOST, originHost),
+  //       AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+  //       ccr.getAVP(AVP_CC_REQUEST_TYPE)!,
+  //       ccr.getAVP(AVP_CC_REQUEST_NUMBER)!,
+  //       mscc, // Embed granted units within the MSCC
+  //     ],
+  //   );
+  // }
+
+  /// Handles an incoming CCR and returns a CCA (OCS Function).
+  DiameterMessage _handleCCR(DiameterMessage ccr) {
+    final sessionId = String.fromCharCodes(ccr.getAVP(AVP_SESSION_ID)!.data!);
+    final requestNumber = ByteData.view(
+      ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data!.buffer,
+    ).getUint32(0);
+    print(
+      'OCS: Received CCR for session $sessionId (Request Number: $requestNumber)',
+    );
+
+    List<AVP> responseAvps = [
+      ccr.getAVP(AVP_SESSION_ID)!,
+      AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
+      AVP.fromString(AVP_ORIGIN_HOST, originHost),
+      AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+      ccr.getAVP(AVP_CC_REQUEST_TYPE)!,
+      ccr.getAVP(AVP_CC_REQUEST_NUMBER)!,
+    ];
+
+    // --- Credit Logic to simulate running out of octets ---
+    if (requestNumber == 0) {
+      // For the first request, grant a small amount of service.
+      print('OCS: User has some credit. Granting 1024 bytes.');
+      final gsu = AVP.fromGrouped(AVP_GRANTED_SERVICE_UNIT, [
+        AVP.fromUnsigned32(AVP_CC_TOTAL_OCTETS, 1024),
+      ]);
+      final mscc = AVP.fromGrouped(AVP_MULTIPLE_SERVICES_CREDIT_CONTROL, [
+        AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
+        gsu,
+      ]);
+      responseAvps.add(mscc);
+    } else {
+      // For subsequent requests, signal that the user has run out of credit.
+      print('OCS: User has run out of octets. Sending Final-Unit-Indication.');
+      final fui = AVP.fromGrouped(AVP_FINAL_UNIT_INDICATION, [
+        // Action is TERMINATE(0)
+        AVP.fromEnumerated(AVP_FINAL_UNIT_ACTION, 0),
+      ]);
+      responseAvps.add(fui);
+    }
+
+    return DiameterMessage.fromFields(
+      commandCode: CMD_CREDIT_CONTROL,
+      applicationId: APP_ID_CREDIT_CONTROL,
+      flags: 0, // This is an Answer
+      hopByHopId: ccr.hopByHopId,
+      endToEndId: ccr.endToEndId,
+      avpList: responseAvps,
     );
   }
 }
