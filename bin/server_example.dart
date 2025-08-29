@@ -1,6 +1,6 @@
 // bin/server_example.dart
 
-import 'package:diameter_protocol/core/diameter_server.dart';
+import 'package:diameter_protocol/core/diameter_server2.dart';
 import 'package:diameter_protocol/applications/session_management.dart';
 
 void main() async {

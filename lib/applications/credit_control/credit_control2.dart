@@ -1,6 +1,6 @@
 // lib/applications/credit_control/credit_control.dart
 
-import '../../core/diameter_message.dart';
+import '../../core/diameter_message2.dart';
 import '../../core/avp_dictionary.dart';
 
 /// Creates Gy Credit-Control-Request (CCR) messages for an Online Charging System.

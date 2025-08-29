@@ -1,6 +1,6 @@
 // lib/applications/base/disconnect_peer.dart
 
-import '../../core/diameter_message.dart';
+import '../../core/diameter_message2.dart';
 import '../../core/avp_dictionary.dart';
 
 class DisconnectPeerRequest extends DiameterMessage {
