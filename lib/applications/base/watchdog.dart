@@ -1,7 +1,7 @@
 // lib/applications/base/watchdog.dart
 
-import '../../core/diameter_message2.dart';
-import '../../core/avp_dictionary.dart';
+import '../../core/diameter_message3.dart';
+import '../../core/avp_dictionary2.dart';
 
 class DeviceWatchdogRequest extends DiameterMessage {
   DeviceWatchdogRequest({

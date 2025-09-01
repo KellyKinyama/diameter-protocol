@@ -1,0 +1,27 @@
+// --- 3GPP Vendor ID ---
+const VENDOR_ID_3GPP = 10415;
+
+// --- New AVPs from Python Examples (3GPP) ---
+const AVP_SERVICE_INFORMATION = 873;
+const AVP_PS_INFORMATION = 874;
+const AVP_IMS_INFORMATION = 876;
+const AVP_MMS_INFORMATION = 877;
+const AVP_LCS_INFORMATION = 878;
+const AVP_POC_INFORMATION = 879;
+const AVP_MBMS_INFORMATION = 880;
+const AVP_M2M_INFORMATION = 2028;
+const AVP_PROSE_INFORMATION = 2037;
+const AVP_DCD_INFORMATION = 2163;
+const AVP_AOC_INFORMATION = 2055;
+const AVP_CPDT_INFORMATION = 3010;
+const AVP_SERVICE_GENERIC_INFORMATION = 1256;
+
+// Add any other specific AVPs you need from the python files, for example:
+const AVP_TGPP_CHARGING_ID = 881;
+const AVP_TGPP_PDP_TYPE = 882;
+const AVP_PDP_ADDRESS = 1227;
+
+// --- New Enums from Python Examples ---
+const E_CC_REQUEST_TYPE_INITIAL_REQUEST = 1;
+const E_CC_REQUEST_TYPE_UPDATE_REQUEST = 2;
+const E_CC_REQUEST_TYPE_TERMINATION_REQUEST = 3;

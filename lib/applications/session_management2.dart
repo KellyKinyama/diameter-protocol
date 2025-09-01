@@ -1,8 +1,8 @@
 // lib/applications/session_management.dart
 
 import 'dart:typed_data'; // Import for Uint8List
-import '../core/diameter_message.dart';
-import '../core/avp_dictionary.dart';
+import '../core/diameter_message3.dart';
+import '../core/avp_dictionary2.dart';
 import 'base/capabilities_exchange.dart';
 // import '../credit_control/capabilities_exchange.dart';
 
@@ -34,12 +34,12 @@ class DiameterSessionManager {
           return _createErrorResponse(request, 5005);
         }
 
-        final sessionId = String.fromCharCodes(sessionIdAvp.data);
+        final sessionId = String.fromCharCodes(sessionIdAvp.data!.toList());
         final session = sessions[sessionId];
 
         final ccRequestTypeAvp = request.getAVP(AVP_CC_REQUEST_TYPE);
         final ccRequestType = (ccRequestTypeAvp != null)
-            ? ByteData.view(ccRequestTypeAvp.data.buffer).getUint32(0)
+            ? ByteData.view(ccRequestTypeAvp.data!.buffer).getUint32(0)
             : 0;
 
         if (session == null && ccRequestType == 1) {
@@ -57,9 +57,11 @@ class DiameterSessionManager {
 
   /// Handles an incoming CCR and returns a CCA for the Gy interface.
   DiameterMessage _handleCCR(DiameterMessage ccr) {
-    final sessionId = String.fromCharCodes(ccr.getAVP(AVP_SESSION_ID)!.data);
+    final sessionId = String.fromCharCodes(
+      ccr.getAVP(AVP_SESSION_ID)!.data!.toList(),
+    );
     final requestNumber = ByteData.view(
-      ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data.buffer,
+      ccr.getAVP(AVP_CC_REQUEST_NUMBER)!.data!.buffer,
     ).getUint32(0);
     print(
       'Gy: Received CCR for session $sessionId (Request Number: $requestNumber)',
@@ -80,7 +82,7 @@ class DiameterSessionManager {
       flags: 0, // This is an Answer
       hopByHopId: ccr.hopByHopId,
       endToEndId: ccr.endToEndId,
-      avpList: [
+      avps: [
         ccr.getAVP(AVP_SESSION_ID)!,
         AVP.fromUnsigned32(AVP_RESULT_CODE, 2001), // DIAMETER_SUCCESS
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -112,7 +114,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: dwr.hopByHopId,
       endToEndId: dwr.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, 2001),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
@@ -123,9 +125,11 @@ class DiameterSessionManager {
 
   DiameterMessage _handleACR(DiameterMessage acr) {
     final recordType = ByteData.view(
-      acr.getAVP(AVP_ACCOUNTING_RECORD_TYPE)!.data.buffer,
+      acr.getAVP(AVP_ACCOUNTING_RECORD_TYPE)!.data!.buffer,
     ).getUint32(0);
-    final sessionId = String.fromCharCodes(acr.getAVP(AVP_SESSION_ID)!.data);
+    final sessionId = String.fromCharCodes(
+      acr.getAVP(AVP_SESSION_ID)!.data!.toList(),
+    );
     print(
       '🧾 Received Accounting Request for session $sessionId (Type: $recordType)',
     );
@@ -136,7 +140,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: acr.hopByHopId,
       endToEndId: acr.endToEndId,
-      avpList: [
+      avps: [
         acr.getAVP(AVP_SESSION_ID)!,
         AVP.fromUnsigned32(AVP_RESULT_CODE, 2001),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -149,7 +153,7 @@ class DiameterSessionManager {
   }
 
   DiameterMessage _handleSTR(DiameterMessage str) {
-    final sessionId = String.fromCharCodes(str.getAVP(AVP_SESSION_ID)!.data);
+    final sessionId = String.fromCharCodes(str.getAVP(AVP_SESSION_ID)!.data!.toList());
     if (sessions.containsKey(sessionId)) {
       sessions.remove(sessionId);
       print('✅ Session terminated and removed: $sessionId');

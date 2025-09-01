@@ -1,0 +1,1937 @@
+S 29.212 version 7.4.0 Release 7)
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 1 ETSI TS 129 212 V7.4.0 (2008-04)
+Reference 
+RTS/TSGC-0329212v740 
+Keywords 
+UMTS 
+ETSI 
+650 Route des Lucioles 
+F-06921 Sophia Antipolis Cedex - FRANCE
+Tel.: +33 4 92 94 42 00 Fax: +33 4 93 65 47 16 
+Siret N° 348 623 562 00017 - NAF 742 C 
+Association à but non lucratif enregistrée à la 
+Sous-Préfecture de Grasse (06) N° 7803/88 
+Important notice 
+Individual copies of the present document can be downloaded from: 
+http://www.etsi.org
+The present document may be made available in more than one electronic version or in print. In any case of existing or 
+perceived difference in contents between such versions, the reference version is the Portable Document Format (PDF). 
+In case of dispute, the reference shall be the printing on ETSI printers of the PDF version kept on a specific network drive 
+within ETSI Secretariat. 
+Users of the present document should be aware that the document may be subject to revision or change of status. 
+Information on the current status of this and other ETSI documents is available at 
+http://portal.etsi.org/tb/status/status.asp
+If you find errors in the present document, please send your comment to one of the following services: 
+http://portal.etsi.org/chaircor/ETSI_support.asp
+Copyright Notification 
+No part may be reproduced except as authorized by written permission. 
+The copyright and the foregoing restriction extend to reproduction in all media. 
+© European Telecommunications Standards Institute 2008. 
+All rights reserved. 
+DECTTM, PLUGTESTSTM, UMTSTM, TIPHONTM, the TIPHON logo and the ETSI logo are Trade Marks of ETSI registered 
+for the benefit of its Members. 
+3GPPTM is a Trade Mark of ETSI registered for the benefit of its Members and of the 3GPP Organizational Partners. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 2 ETSI TS 129 212 V7.4.0 (2008-04)
+Intellectual Property Rights 
+IPRs essential or potentially essential to the present document may have been declared to ETSI. The information 
+pertaining to these essential IPRs, if any, is publicly available for ETSI members and non-members, and can be found 
+in ETSI SR 000 314: "Intellectual Property Rights (IPRs); Essential, or potentially Essential, IPRs notified to ETSI in 
+respect of ETSI standards", which is available from the ETSI Secretariat. Latest updates are available on the ETSI Web 
+server (http://webapp.etsi.org/IPR/home.asp). 
+Pursuant to the ETSI IPR Policy, no investigation, including IPR searches, has been carried out by ETSI. No guarantee 
+can be given as to the existence of other IPRs not referenced in ETSI SR 000 314 (or the updates on the ETSI Web 
+server) which are, or may be, or may become, essential to the present document. 
+Foreword 
+This Technical Specification (TS) has been produced by ETSI 3rd Generation Partnership Project (3GPP). 
+The present document may refer to technical specifications or reports using their 3GPP identities, UMTS identities or 
+GSM identities. These should be interpreted as being references to the corresponding ETSI deliverables. 
+The cross reference between GSM, UMTS, 3GPP and ETSI identities can be found under 
+http://webapp.etsi.org/key/queryform.asp.
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 3 ETSI TS 129 212 V7.4.0 (2008-04)
+Contents 
+Intellectual Property Rights................................................................................................................................2
+Foreword.............................................................................................................................................................2
+Foreword.............................................................................................................................................................5
+1 Scope ........................................................................................................................................................6
+2 References ................................................................................................................................................6
+3 Definitions and abbreviations...................................................................................................................7
+3.1 Definitions..........................................................................................................................................................7
+3.2 Abbreviations .....................................................................................................................................................7
+4 Gx reference point....................................................................................................................................7
+4.1 Overview ............................................................................................................................................................7
+4.2 Gx Reference model...........................................................................................................................................7
+4.3 PCC Rules ..........................................................................................................................................................8
+4.3.1 PCC Rule Definition.....................................................................................................................................8
+4.3.2 Operations on PCC Rules .............................................................................................................................9
+4.4 Functional elements..........................................................................................................................................10
+4.4.1 PCRF ..........................................................................................................................................................10
+4.4.2 PCEF...........................................................................................................................................................10
+4.5 PCC procedures over Gx reference point .........................................................................................................11
+4.5.1 Request for PCC rules.................................................................................................................................11
+4.5.2 Provisioning of PCC rules ..........................................................................................................................12
+4.5.2.1 Selecting a PCC rule for Uplink IP packets ..........................................................................................14
+4.5.2.2 Selecting a PCC rule and IP CAN Bearer for Downlink IP packets .....................................................14
+4.5.2.3 Gate function.........................................................................................................................................14
+4.5.2.4 Policy enforcement for "Authorized QoS" per PCC Rule.....................................................................14
+4.5.3 Provisioning of Event Triggers...................................................................................................................14
+4.5.4 Provisioning of charging related information for the IP-CAN session .......................................................15
+4.5.4.1 Provisioning of Charging Addresses.....................................................................................................15
+4.5.4.2 Provisioning of Default Charging Method............................................................................................15
+4.5.5 Provisioning and Policy Enforcement of Authorized QoS .........................................................................15
+4.5.5.0 Overview...............................................................................................................................................15
+4.5.5.0a Provisioning of authorized QoS per IP CAN bearer .............................................................................16
+4.5.5.1 Policy enforcement for authorized QoS per IP CAN bearer .................................................................17
+4.5.5.2 Policy provisioning for authorized QoS per service data flow..............................................................18
+4.5.5.3 Policy enforcement for authorized QoS per service data flow..............................................................18
+4.5.5.4 Coordination of authorized QoS scopes in mixed mode .......................................................................18
+4.5.5.5 Provisioning of authorized QoS per QCI ..............................................................................................19
+4.5.5.6 Policy enforcement for authorized QoS per QCI ..................................................................................19
+4.5.6 Indication of IP-CAN Bearer Termination Implications.............................................................................19
+4.5.7 Indication of IP-CAN Session Termination................................................................................................20
+4.5.8 Request of IP-CAN Bearer Termination.....................................................................................................20
+4.5.9 Request of IP-CAN Session Termination ...................................................................................................20
+4.5.10 Bearer Control Mode Selection ..................................................................................................................21
+5 Gx protocol.............................................................................................................................................21
+5.1 Protocol support ...............................................................................................................................................21
+5.2 Initialization, maintenance and termination of connection and session............................................................22
+5.3 Gx specific AVPs .............................................................................................................................................22
+5.3.1 Bearer-Usage AVP (GPRS access type only).............................................................................................23
+5.3.2 Charging-Rule-Install AVP (All access types) ...........................................................................................23
+5.3.3 Charging-Rule-Remove AVP (All access types)........................................................................................24
+5.3.4 Charging-Rule-Definition AVP (All access types).....................................................................................24
+5.3.5 Charging-Rule-Base-Name AVP (All access types)...................................................................................25
+5.3.6 Charging-Rule-Name AVP (All access types)............................................................................................25
+5.3.7 Event-Trigger AVP (All access types)........................................................................................................25
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 4 ETSI TS 129 212 V7.4.0 (2008-04)
+5.3.8 Metering-Method AVP (All access types)..................................................................................................27
+5.3.9 Offline AVP (All access types)...................................................................................................................28
+5.3.10 Online AVP (All access types) ...................................................................................................................28
+5.3.11 Precedence AVP (All access types)............................................................................................................29
+5.3.12 Reporting-Level AVP (All access types)....................................................................................................29
+5.3.13 TFT-Filter AVP (GPRS access type only)..................................................................................................29
+5.3.14 TFT-Packet-Filter-Information AVP (GPRS access type only) .................................................................30
+5.3.15 ToS-Traffic-Class AVP (GPRS access type only)......................................................................................30
+5.3.16 QoS-Information AVP (All access types)...................................................................................................30
+5.3.17 QoS-Class-Identifier AVP (All access types).............................................................................................31
+5.3.18 Charging-Rule-Report AVP (All access types) ..........................................................................................31
+5.3.19 PCC-Rule-Status AVP (All access types)...................................................................................................31
+5.3.20 Bearer-Identifier AVP (Applicable access type GPRS)..............................................................................32
+5.3.21 Bearer-Operation AVP (Applicable access type GPRS).............................................................................32
+5.3.22 Access-Network-Charging-Identifier-Gx AVP (All access types) .............................................................32
+5.3.23 Bearer-Control Mode AVP.........................................................................................................................33
+5.3.24 Network Request Support AVP..................................................................................................................33
+5.3.25 Guaranteed-Bitrate-DL AVP ......................................................................................................................33
+5.3.26 Guaranteed-Bitrate-UL AVP ......................................................................................................................33
+5.3.27 IP-CAN-Type AVP (All access types) .......................................................................................................33
+5.3.28 QoS-Negotiation AVP (GPRS Access Type only) .....................................................................................34
+5.3.29 QoS-Upgrade AVP (GPRS Access Type only) ..........................................................................................34
+5.4 Gx re-used AVPs..............................................................................................................................................35
+5.5 Gx specific Experimental-Result-Code AVP values........................................................................................37
+5.5.1 General........................................................................................................................................................37
+5.5.2 Success........................................................................................................................................................37
+5.5.3 Permanent Failures .....................................................................................................................................38
+5.5.4 Transient Failures .......................................................................................................................................38
+5.6 Gx Messages ....................................................................................................................................................38
+5.6.1 Gx Application............................................................................................................................................38
+5.6.2 CC-Request (CCR) Command....................................................................................................................39
+5.6.3 CC-Answer (CCA) Command....................................................................................................................39
+5.6.4 Re-Auth-Request (RAR) Command ...........................................................................................................40
+5.6.5 Re-Auth-Answer (RAA) Command ...........................................................................................................41
+Annex A (informative): Change history ...............................................................................................42
+History ..............................................................................................................................................................44
+ 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 5 ETSI TS 129 212 V7.4.0 (2008-04)
+Foreword 
+This Technical Specification has been produced by the 3rd Generation Partnership Project (3GPP). 
+The contents of the present document are subject to continuing work within the TSG and may change following formal 
+TSG approval. Should the TSG modify the contents of the present document, it will be re-released by the TSG with an 
+identifying change of release date and an increase in version number as follows: 
+Version x.y.z 
+where: 
+x the first digit: 
+1 presented to TSG for information; 
+2 presented to TSG for approval; 
+3 or greater indicates TSG approved document under change control. 
+y the second digit is incremented for all changes of substance, i.e. technical enhancements, corrections, 
+updates, etc. 
+z the third digit is incremented when editorial only changes have been incorporated in the document. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 6 ETSI TS 129 212 V7.4.0 (2008-04)
+1 Scope 
+The present document provides the stage 3 specification of the Gx reference point for the present release. The functional 
+requirements and the stage 2 specifications of the Gx refernce point are contained in 3GPP TS 23.203 [7]. The Gx 
+reference point lies between the Policy and Charging Rule Function and the Policy and Charging Enforcement 
+Function. 
+Whenever it is possible the present document specifies the requirements for the protocol by reference to specifications 
+produced by the IETF within the scope of Diameter. Where this is not possible, extensions to Diameter are defined 
+within the present document. 
+2 References 
+The following documents contain provisions which, through reference in this text, constitute provisions of the present 
+document. 
+• References are either specific (identified by date of publication and/or edition number or version number) or 
+non-specific. 
+• For a specific reference, subsequent revisions do not apply. 
+• For a non-specific reference, the latest version applies. In the case of a reference to a 3GPP document 
+(including a GSM document), a non-specific reference implicitly refers to the latest version of that document in 
+the same Release as the present document. 
+[1] 3GPP TR 21.905: "Vocabulary for 3GPP Specifications". 
+[2] 3GPP TS 29.210: "Charging Rule Provisioning over Gx Interface". 
+[3] 3GPP TS 29.207: "Policy control over Go interface". 
+[4] 3GPP TS 29.208: "End-to-end Quality of Service (QoS) signalling flows". 
+[5] IETF RFC 3588: "Diameter Base Protocol". 
+[6] IETF RFC 3556: "Session Description Protocol (SDP) Bandwidth Modifiers for RTP Control 
+Protocol (RTCP) Bandwidth". 
+[7] 3GPP TS 23.203: "Policy Control and Charging architecture". 
+[8] 3GPP TS 29.213: "Policy and charging control signalling flows and Quality of Service (QoS) 
+parameter mapping". 
+[9] IETF RFC 4006: "Diameter Credit Control Application". 
+[10] 3GPP TS 29.214: "Policy and Charging Control over Rx reference point". 
+[11] 3GPP TS 29.061: "Interworking between the Public Land Mobile Network (PLMN) supporting 
+packet based services and Packet Data Networks (PDN)". 
+[12] IETF RFC 4005: "Diameter Network Access Server Application". 
+[13] 3GPP TS 24.008: "Mobile radio interface Layer 3 specification". 
+[14] 3GPP TS 29.229: "Cx and Dx interfaces based on Diameter protocol; Protocol details". 
+[15] IETF RFC 3162: "Radius and IPv6". 
+[16] 3GPP TS 32.295: "Telecommunication management; Charging management; Charging Data 
+Record (CDR) transfer". 
+[17] 3GPP TS 23.060: "General Packet Radio Service (GPRS); Service description; Stage 2". 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 7 ETSI TS 129 212 V7.4.0 (2008-04)
+[18] 3GPP TS 29.060: "General Packet Radio Service (GPRS); GPRS Tunnelling Protocol (GTP) 
+across the Gn and Gp interface". 
+[19] 3GPP TS 32.299: "Telecommunication management; Charging management; Diameter charging 
+applications ". 
+[20] 3GPP TS 29.060: "General Packet Radio Service (GPRS); GPRS Tunnelling Protocol (GTP) 
+across the Gn and Gp interface'. 
+3 Definitions and abbreviations 
+3.1 Definitions 
+For the purposes of the present document, the terms and definitions given in 3GPP TR 21.905 [1] and the following 
+apply: 
+IP-CAN bearer: IP transmission path of defined capacity, delay and bit error rate, etc. 
+See 3GPP TS 21.905 [1] for the definition of bearer. 
+IP-CAN session: association between a UE and an IP network 
+The association is identified by a UE IP address together with a UE identity information, if available. An IP-CAN 
+session incorporates one or more IP-CAN bearers. Support for multiple IP-CAN bearers per IP-CAN session is IP-CAN 
+specific. An IP-CAN session exists as long as the UE IP address is established and announced to the IP network. 
+IP flow: unidirectional flow of IP packets with the same source IP address and port number and the same destination IP 
+address and port number and the same transport protocol 
+Port numbers are only applicable if used by the transport protocol. 
+3.2 Abbreviations 
+For the purpose of the present document, the abbreviations given in 3GPP TR 21.905 [1] and the following apply: 
+AF Application Function 
+OCS Online charging system 
+OFCS Offline charging system 
+PCEF Policy and Charging Enforcement Function 
+PCRF Policy and Charging Rule Function 
+4 Gx reference point 
+4.1 Overview 
+The Gx reference point is located between the Policy and Charging Rules Function (PCRF) and the Policy and 
+Charging Enforcement Function (PCEF). The Gx reference point is used for provisioning and removal of PCC rules 
+from the PCRF to the PCEF and the transmission of traffic plane events from the PCEF to the PCRF. The Gx reference 
+point can be used for charging control, policy control or both by applying AVPs relevant to the application. 
+The stage 2 level requirements for the Gx reference point are defined in 3GPP TS 23.203 [7]. 
+Signalling flows related to the both Rx and Gx interfaces are specified in 3GPP TS 29.213 [8]. 
+4.2 Gx Reference model 
+The Gx reference point is defined between the PCRF and the PCEF. The relationships between the different functional 
+entities involved are depicted in figure 4.1. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 8 ETSI TS 129 212 V7.4.0 (2008-04)
+GW 
+ Online Charging System (OCS)
+Service Data Flow 
+Based 
+Credit Control 
+Policy and Charging 
+Rules Function 
+(PCRF) 
+CAMEL
+SCP
+Gy
+Rx
+AF 
+Gz
+Gx
+Subscription Profile
+ Repository 
+(SPR) 
+Sp
+Offline 
+Charging 
+System 
+(OFCS)
+PCEF 
+Figure 4.1: Gx reference point at the Policy and Charging Control (PCC) architecture 
+NOTE: The details associated with the Sp reference point are not specified in this Release. The SPR"s relation to 
+existing subscriber databases is not specified in this Release. 
+4.3 PCC Rules 
+4.3.1 PCC Rule Definition 
+The purpose of the PCC rule is to: 
+- Detect a packet belonging to a service data flow. 
+- The service data flow filters within the PCC rule are used for the selection of downlink IP CAN bearers. 
+- The service data flow filters within the PCC rule are used for the enforcement that uplink IP flows are 
+transported in the correct IP CAN bearer. 
+- Identify the service the service data flow contributes to. 
+- Provide applicable charging parameters for a service data flow. 
+- Provide policy control for a service data flow. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 9 ETSI TS 129 212 V7.4.0 (2008-04)
+The PCEF shall select a PCC rule for each received packet by evaluating received packets against service data flow 
+filters of PCC rules in the order of the precedence of the PCC rules.. When a packet matches a service data flow filter, 
+the packet matching process for that packet is completed, and the PCC rule for that filter shall be applied. 
+There are two different types of PCC rules as defined in [7]: 
+- Dynamic PCC rules. Dynamically provisioned by the PCRF to the PCEF via the Gx interface. These PCC rules 
+may be either predefined or dynamically generated in the PCRF. Dynamic PCC rules can be activated, modified 
+and deactivated at any time. 
+- Predefined PCC rules. Preconfigured in the PCEF. Predefined PCC rules can be activated or deactivated by the 
+PCRF at any time. Predefined PCC rules within the PCEF may be grouped allowing the PCRF to dynamically 
+activate a set of PCC rules over the Gx reference point. 
+NOTE: The operator may define a predefined PCC rule, to be activated by the PCEF. Such a predefined rule is 
+not explicitly known in the PCRF and not under the control of the PCRF. 
+A PCC rule consists of: 
+- a rule name; 
+- service identifier; 
+- service data flow filter(s); 
+- precedence; 
+- gate status; 
+- QoS parameters; 
+- charging key (i.e. rating group); 
+- other charging parameters. 
+The rule name shall be used to reference a PCC rule in the communication between the PCEF and the PCRF. 
+The service identifier shall be used to identify the service or the service component the service data flow relates to. 
+The service flow filter(s) shall be used to select the traffic for which the rule applies. 
+The gate status indicates whether the service data flow, detected by the service data flow filter(s), may pass (gate is 
+open) or shall be discarded (gate is closed) in uplink and/or in downlink direction. 
+The QoS information includes the QoS class identifier (authorized QoS class for the service data flow) and authorized 
+bitrates for uplink and downlink. 
+The charging parameters define whether online and offline charging interfaces are used, what is to be metered in offline 
+charging, on what level the PCEF shall report the usage related to the rule, etc. 
+For different PCC rules with overlapping service data flow filter, the precedence of the rule determines which of these 
+rules is applicable. When a dynamic PCC rule and a predefined PCC rule have the same precedence, the dynamic PCC 
+rule takes precedence. 
+PCC rule also includes Application Function record information for enabling charging correlation between the 
+application and bearer layer if the AF has provided this information via the Rx interface. For IMS this includes the IMS 
+Charging Identifier (ICID) and flow identifiers. 
+4.3.2 Operations on PCC Rules 
+For dynamic PCC rules, the following operations are available: 
+- Installation: to provision a PCC rules that has not been already provisioned. 
+- Modification: to modify a PCC rule already installed. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 10 ETSI TS 129 212 V7.4.0 (2008-04)
+- Removal: to remove a PCC rule already installed. 
+For predefined PCC rules, the following operations are available: 
+- Activation: to allow the PCC rule being active. 
+- Deactivation: to disallow the PCC rule. 
+The procedures to perform these operations are further described in clause 4.5.2. 
+4.4 Functional elements 
+4.4.1 PCRF 
+The PCRF (Policy Control and Charging Rules Function) is a functional element that encompasses policy control 
+decision and flow based charging control functionalities. These 2 functionalities are the heritage of the release 6 logical 
+entities PDF and CRF respectively. The PCRF provides network control regarding the service data flow detection, 
+gating, QoS and flow based charging (except credit management) towards the PCEF. The PCRF receives session and 
+media related information from the AF and informs AF of traffic plane events. 
+The PCRF shall provision PCC Rules to the PCEF via the Gx reference point. 
+The PCRF PCC Rule decisions may be based on one or more of the following: 
+- Information obtained from the AF via the Rx reference point, e.g. the session, media and subscriber related 
+information. 
+- Information obtained from the PCEF via the Gx reference point, e.g. IP-CAN bearer attributes, request type and 
+subscriber related information. 
+- Information obtained from the SPR via the Sp reference point, e.g. subscriber and service related data. 
+NOTE: The details associated with the Sp reference point are not specified in this Release. The SPR"s relation to 
+existing subscriber databases is not specified in this Release. 
+- Own PCRF pre-configured information. 
+The PCRF shall report events to the AF via the Rx reference point. 
+The PCRF shall inform the PCEF through the use of PCC rules on the treatment of each service data flow that is under 
+PCC control, in accordance with the PCRF policy decision(s). For GPRS it shall be possible to support policy control, 
+i.e. access control and QoS control, on a per PDP context basis for the UE initiated case. 
+The PCRF shall be able to select the bearer control mode that will apply for the IP-CAN session and provide it to the 
+PCEF via the Gx reference point. 
+Upon subscription to loss of AF signalling bearer notifications by the AF, the PCRF shall request to PCEF to be notified 
+of the loss of resources associated to the PCC Rules corresponding with AF Signalling IP Flows, if this has not been 
+requested previously. 
+4.4.2 PCEF 
+The PCEF (Policy and Charging Enforcement Function) is the functional element that encompasses policy enforcement 
+and flow based charging functionalities. These 2 functionalities are the heritage of the release 6 logical entities PEP and 
+TPF respectively. This functional entity is located at the Gateway (e.g. GGSN in the GPRS case, and PDG in the 
+WLAN case). It provides control over the user plane traffic handling at the Gateway and its QoS, and provides service 
+data flow detection and counting as well as online and offline charging interactions. 
+For a service data flow that is under policy control the PCEF shall allow the service data flow to pass through the 
+Gateway if and only if the corresponding gate is open. 
+For a service data flow that is under charging control the PCEF shall allow the service data flow to pass through the 
+Gateway if and only if there is a corresponding active PCC rule and, for online charging, the OCS has authorized the 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 11 ETSI TS 129 212 V7.4.0 (2008-04)
+applicable credit with that Charging key. The PCEF may let a service data flow pass through the Gateway during the 
+course of the credit re-authorization procedure. 
+If requested by the PCRF, the PCEF shall report to the PCRF when the status of the related service data flow changes. 
+This procedure can be used to monitor an IP-CAN bearer dedicated for AF signalling traffic. 
+4.5 PCC procedures over Gx reference point 
+4.5.1 Request for PCC rules 
+The PCEF shall indicate, via the Gx reference point, a request for PCC rules in the following instances. 
+1) At IP-CAN session establishment: 
+- The PCEF shall send a CC-Request with CC-Request-Type AVP set to the value "INITIAL_REQUEST". 
+The PCEF shall supply user identification and other attributes to allow the PCRF to identify the rules to be 
+applied. The other attributes shall include the type of IP-CAN, the type of the radio access technology (e.g 
+UTRAN, GERAN, WLAN) and the UE IP address. The PCEF may also include the Access-NetworkCharging-Address and Access-Network-Charging-Identifier-Gx AVPs in the CC-Request. For GPRS, 
+information about the user equipment (e.g. IMEISV), QoS negotiated and further QoS related information as 
+detailed in Clause 4.5.5.0a, user location information (e.g. RAI, CGI/SAI) SGSN Address, SGSN country 
+and network codes, APN, TFT and indication if the bearer is used as IMS signalling PDP context shall be 
+provided. Furthermore, if the UE and the network support the network network-initiated bearer request 
+procedure, the PCEF shall indicate this by supplying the Network Request Support AVP. If the UE indicated 
+a preferred bearer control mode, the PCEF shall indicate this mode within the Bearer-Control Mode AVP. 
+ For IP-CAN types that support multiple IP-CAN bearers (as in the case of GPRS), the PCEF shall provide 
+the Bearer-Identifier AVP at the IP-CAN session establishment. In this case, the PCEF shall also include the 
+Bearer-Operation AVP set to the value "Establishment". 
+2) At IP-CAN session modification: 
+ IP-CAN session modification with PCEF-requested rules can occur in the following cases: 
+- For GPRS, when a new PDP Context is being established by the UE in an already existing IP-CAN 
+Session. 
+- For GPRS, when a PDP context is being modified and an Event trigger is met. 
+- For GPRS, when a PDP context is being terminated. 
+ The PCEF shall send a CC-Request with CC-Request-Type AVP set to the value "UPDATE_REQUEST". 
+The PCEF may include the Access-Network-Charging-Address and Access-Network-Charging-Identifier-Gx 
+AVPs in the CC-Request. For an IP-CAN Session modification where an existing IP-CAN Bearer is 
+modified, the PCEF shall supply within the PCC rule request the specific event which caused the IP-CAN 
+session modification (within the Event-Trigger AVP) and any previously provisioned PCC rule(s) affected by 
+the IP-CAN session modification. The PCC rules and their status shall be supplied to PCRF within the 
+Charging-Rule-Report AVP. 
+ In the case the PCRF performs the bearer binding and: 
+- a new IP-CAN bearer is being established, the PCEF shall assign a new bearer identifier to this IP-CAN 
+bearer, include this identifier within the Bearer-Identifier AVP, and include the Bearer-Operation AVP set 
+to the value "Establishment", and supply QoS related information as detailed in Clause 4.5.5.0a; 
+- an existing IP-CAN bearer is being modified, the PCEF shall include the Bearer-Identifier AVP and the 
+Bearer-Operation AVP set to the value "Modification", and supply QoS related information as detailed in 
+Clause 4.5.5.0a. If the Event trigger that caused the IP-CAN bearer modification applies at session level 
+(i.e. it is common to all the bearers belonging to that IP-CAN session), PCEF shall send a single CCRequest for all the affected bearers. In this case, the Bearer-Identifier AVP shall not be included to 
+indicate that it applies to all the IP-CAN bearers in the IP-CAN session. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 12 ETSI TS 129 212 V7.4.0 (2008-04)
+ In the case both the PCRF and the PCEF may performs the bearer binding: 
+For GPRS, this applies for the mixed UE/network bearer control mode: 
+- If the UE request the establishment of a new IP-CAN bearer, the PCEF shall assign a new bearer 
+identifier to this IP-CAN bearer, include this identifier within the Bearer-Identifier AVP, and include the 
+Bearer-Operation AVP set to the value "Establishment", the UE-provided TFT filters and the requested 
+QoS of the new IP-CAN bearer and further QoS related information as detailed in Clause 4.5.5.0a. 
+- If an existing IP-CAN bearer is being modified: 
+- If the PCEF has not yet notified the PCRF about this IP CAN bearer and the UE assigns one or more 
+Traffic Flow template(s) within an IP CAN Bearer modification request, the PCEF shall assign a new 
+bearer identifier to this IP-CAN bearer, and shall include the Bearer-Identifier AVP and the BearerOperation AVP set to the value "Establishment", the UE-provided TFT filters and the requested QoS 
+of the new IP-CAN bearer and further QoS related information as detailed in Clause 4.5.5.0a. The 
+PCEF shall modify the received requested QoS by removing the bandwidth required for PCC rules the 
+PCEF has previously bound to this IP CAN bearer and indicate this modified requested QoS to the 
+PCRF. 
+NOTE: The details how the bandwidth required for PCC rules the PCEF has previously bound to this IP CAN 
+bearer are calculated are ffs, e.g. the significance of the maximum and guaranteed bandwidth per PCC 
+rule in this calculation. 
+- If the PCEF has already notified the PCRF about this IP CAN bearer, the PCEF shall include the 
+Bearer-Identifier AVP and the Bearer-Operation AVP set to the value "Modification" and QoS related 
+information as detailed in Clause 4.5.5.0a. If the PCEF has received a new requested QoS as part of an 
+IP CAN bearer modification request, the PCEF shall modify this received requested QoS by removing 
+the bandwidth required for PCC rules the PCEF has previously bound to this IP CAN bearer and 
+indicate this modified requested QoS to the PCRF. 
+NOTE: The details how the bandwidth required for PCC rules the PCEF has previously bound to this IP CAN 
+bearer are calculated are ffs, e.g. the significance of the maximum and guaranteed bandwidth per PCC 
+rule in this calculation. 
+ If the Event trigger that caused the IP-CAN bearer modification applies at session level (i.e. it is common 
+to all the bearers belonging to that IP-CAN session), PCEF shall send a single CC-Request for all the 
+affected bearers. In this case, the Bearer-Identifier AVP shall not be included to indicate that it applies to 
+all the IP-CAN bearers in the IP-CAN session. If the Event trigger that caused the IP CAN bearer 
+modification applies at bearer level, the Charging-Rule-Report AVP shall include all the affected PCC 
+rules. 
+If the PCRF is, due to incomplete, erroneous or missing information (e.g. subscription related information not available 
+or authorized QoS exceeding the subscribed bandwidth) not able to provision a policy decision as response to the 
+request for PCC rules by the PCEF, the PCRF may reject the request using a CC Answer with the Gx experimental 
+result code DIAMETER_ERROR_INITIAL_PARAMETERS (5140). If the PCEF receives a CC Answer with this 
+code, the PCEF shall reject the IP-CAN session establishment or modification that initiated the CC Request. 
+4.5.2 Provisioning of PCC rules 
+The PCRF shall indicate, via the Gx reference point, PCC rules to be applied at the PCEF. This may be using one of the 
+following procedures: 
+- PULL procedure(Provisioning solicited by the PCEF): In response to a request for PCC rules being made by the 
+PCEF, as described in the preceding section, the PCRF shall provision PCC rules in the CC-Answer; or 
+- PUSH procedure(Unsolicited provisioning): The PCRF may decide to provision PCC rules without obtaining a 
+request from the PCEF, e.g. in response to information provided to the PCRF via the Rx reference point, or in 
+response to an internal trigger within the PCRF. To provision PCC rules without a request from the PCEF, the 
+PCRF shall include these PCC rules in an RA-Request message. No CCR/CCA messages are triggered by this 
+RA-Request. 
+For each request from the PCEF or upon the unsolicited provision the PCRF shall provision zero or more PCC rules.. 
+The PCRF may perform an operation on a single PCC rule by one of the following means: 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 13 ETSI TS 129 212 V7.4.0 (2008-04)
+- To activate or deactivate a PCC rule that is predefined at the PCEF, the PCRF shall provision a reference to this 
+PCC rule within a Charging-Rule-Name AVP and indicate the required action by choosing either the ChargingRule-Install AVP or the Charging-Rule-Remove AVP. 
+- To install or modify a PCRF-provisioned PCC rule, the PCRF shall provision a corresponding Charging-RuleDefinition AVP within a Charging-Rule-Install AVP. 
+- To remove a PCC rule which has previously been provisioned by .the PCRF, the PCRF shall provision the name 
+of this rule as value of a Charging-Rule-Name AVP within a Charging-Rule-Remove AVP. 
+- If the PCRF performs the bearer binding, the PCRF may move previously installed or activated PCC rules from 
+one IP CAN bearer to another IP CAN bearer, as described further down. 
+As an alternative to providing a single PCC rule, the PCRF may provide a Charging-Rule-Base-Name AVP within a 
+Charging-Rule-Install AVP or the Charging-Rule-Remove AVP as a reference to a group of PCC rules predefined at the 
+PCEF. With a Charging-Rule-Install AVP, a predefined group of PCC rules is activated or moved. With a ChargingRule-Remove AVP, a predefined group of PCC rules is deactivated. 
+The PCRF may combine multiple of the above PCC rule operations in a single command. 
+To activate a predefined PCC rule at the PCEF, the rule name within a Charging-Rule-Name AVP shall be supplied 
+within a Charging-Rule-Install AVP as a reference to the predefined rule. To activate a group of predefined PCC rules 
+within the PCEF (e.g. gold users or gaming services) the PCC rule base name within a Charging-Rule-Base-Name AVP 
+shall be supplied within a Charging-Rule-Install AVP as a reference to the group of predefined PCC rules. If the PCRF 
+performs the bearer binding, the PCRF shall indicate the IP CAN bearer where the PCC rules shall be activated using a 
+Bearer-Identifier AVP within the Charging-Rule-Install AVP. 
+To install a new or modify an already installed PCRF defined PCC rule, the Charging-Rule-Definition AVP shall be 
+used. If a PCC rule with the same rule name, as supplied in the Charging-Rule-Name AVP within the Charging-RuleDefinition AVP, already exists at the PCEF, the new PCC rule shall update the currently installed rule. If the existing 
+PCC rule already has attributes also included in the new PCC rule definition, the existing attributes shall be overwritten. 
+Any attribute in the existing PCC rule not included in the new PCC rule definition shall remain valid. 
+If the PCRF performs the bearer binding (for GPRS for "UE only" or mixed "UE/network" bearer control mode) and 
+installs or activates a new PCC rule, the PCRF shall indicate the IP CAN bearer where the new rule shall be installed 
+using a Bearer-Identifier AVP within the Charging-Rule-Install AVP. If the PCRF modifies an already installed PCC 
+rule, the PCRF does not need to indicate the bearer. If the PCEF obtains an updated definition of a PCC rule within a 
+Charging-Rule-Install AVP without a Bearer-Identifier AVP, the PCEF shall continue to apply the PCC rule to the IP 
+CAN bearer that has previously been indicated. 
+If the PCRF does not perform the bearer binding and installs or activates a new PCC rule, the PCRF does not indicate 
+the bearer within the Charging-Rule-Install AVP. The PCEF shall then perform the bearer binding and select the IP 
+CAN bearer where the provisioned new PCC rule is applied. 
+If the PCRF performs the bearer binding, the PCRF may move previously installed or activated PCC rule(s) from one IP 
+CAN bearer to another IP CAN bearer. To move such PCC rule(s), the PCRF shall indicate the new bearer using the 
+Bearer-Identifier AVP within a Charging-Rule-Install AVP and shall indicate the charging rules(s) to be moved using 
+Charging-Rule name AVP(s), and/or a Charging-Rule-Base-Name AVP(s), and/or Charging-Rule-Definition AVP(s) 
+(for PCC rule(s) that are modified at the same time). The PCEF shall then apply these PCC rules at the new indicated IP 
+CAN bearer and shall remove them from the IP CAN bearer where the rules previously had been applied. 
+Further details of the binding mechanism can be found in 3GPP TS 29.213 [8]. 
+For deactivating single predefined or removing PCRF-provided PCC rules, the Charging-Rule-Name AVP shall be 
+supplied within a Charging-Rule-Remove AVP. For deactivating a group of predefined PCC rules, the Charging-RuleBase-Name AVP shall be supplied within a Charging-Rule-Remove AVP. 
+NOTE: When deactivating a predefined PCC rule that is activated in more than one IP-CAN bearers, the 
+predefined PCC rule is deactivated simultaneously in all the IP-CAN bearers where it was previously 
+activated. 
+If the provisioning of PCC rules fails, the PCEF informs the PCRF. It will be done by means of a new CCR command 
+(if the installation/activation failed using a PULL mode) or in the RAA command (if the failure occurred using a PUSH 
+mode). If network initiated procedures apply for the PCC rule and the corresponding IP-CAN bearer can not be 
+established or modified to satisfy the bearer binding, then the PCEF shall reject the activation of a PCC rule using the 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 14 ETSI TS 129 212 V7.4.0 (2008-04)
+Gx experimental result code DIAMETER_PCC_BEARER_EVENT and a proper Event-Trigger value. Depending on 
+the cause, PCRF can decide if re-installation, modification, removal of PCC rules or any other action apply. 
+If the PCRF is unable to create a PCC rule for the response to the CC Request by the PCEF, the PCRF may reject the 
+request as described in subclause 4.5.1. 
+4.5.2.1 Selecting a PCC rule for Uplink IP packets 
+If PCC is enabled, the PCEF shall select the applicable PCC rule for each received uplink IP packet within an IP CAN 
+bearer (for GPRS, PDP context) by evaluating the packet against uplink service data flow filters of PCRF-provided or 
+predefined active PCC rules of this IP CAN bearer in the order of the precedence of the PCC rules. When a PCRFprovided PCC rule and a predefined PCC rule have the same precedence, the uplink service data flow filters of the 
+PCRF-provided PCC rule shall be applied first. When a packet matches a service data flow filter, the packet matching 
+process for that packet is completed, and the PCC rule for that filter shall be applied. Uplink IP packets which do not 
+match any PCC rule of the corresponding IP CAN bearer shall be silently discarded. 
+4.5.2.2 Selecting a PCC rule and IP CAN Bearer for Downlink IP packets 
+If PCC is enabled, the PCEF shall select a PCC rule for each received downlink IP packet within an IP CAN session by 
+evaluating the packet against downlink service data flow filters of PCRF-provided or predefined active PCC rules of all 
+IP CAN bearers of the IP CAN session in the order of the precedence of the PCC rules. When a PCRF-provided PCC 
+rule and a predefined PCC rule have the same precedence, the downlink service data flow filters of the PCRF-provided 
+PCC rule shall be applied first. When a packet matches a service data flow filter, the packet matching process for that 
+packet is completed, and the PCC rule for that filter shall be applied. The Downlink IP Packet shall be transported 
+within the IP CAN bearer where the selected PCC rule is mapped. Downlink IP packets which do not match any PCC 
+rule of the IP CAN session shall be silently discarded. 
+For GPRS, TFT filters shall not be applied to assign downlink IP packets to PDP contexts if PCC is enabled for an 
+APN. 
+4.5.2.3 Gate function 
+The Gate Function represents a user plane function enabling or disabling the forwarding of service flow packets. A gate 
+is described within a PCC rule. If the PCC rule contains Flow-Description AVP(s) applicable for uplink IP flows, it 
+shall describe a gate for the corresponding uplink IP flows. If the PCC rule contains Flow-Description AVP(s) 
+applicable for downlink IP flows, it shall describe a gate for the corresponding downlink IP flows. The Flow Status 
+AVP of the PCC rule shall describe if the possible uplink and possible downlink gate is opened or closed. 
+The commands to open or close the gate shall lead to the enabling or disabling of the passage for corresponding IP 
+packets. If the gate is closed all packets of the related IP flows shall be dropped. If the gate is opened the packets of the 
+related IP flows are allowed to be forwarded. 
+4.5.2.4 Policy enforcement for "Authorized QoS" per PCC Rule 
+The PCRF can provide the authorized QoS for a PCC rule to the PCEF. The Provisioning of authorized QoS per PCC 
+Rule shall be performed using the PCC rule provisioning procedure. For a PCRF-provided PCC rule, the "Authorized 
+QoS" shall be encoded using a QoS-Information AVP within the Charging-Rule-Definition AVP of the PCC rule. If 
+"Authorized QoS" is provided for a PCC rule, the PCEF shall enforce the corresponding policy. 
+See also Clause 4.5.5. 
+4.5.3 Provisioning of Event Triggers 
+The PCRF may provide one or several event triggers within one or several Event-Trigger AVP to the PCEF using the 
+PCC rule provision procedure. Event triggers may be used to determine which IP-CAN session modification or specific 
+event causes the PCEF to re-request PCC rules. Although event trigger reporting from PCEF to PCRF can apply for an 
+IP CAN session or bearer depending on the particular event, provisioning of event triggers will be done at session level. 
+The Event-Trigger AVP may be provided in combination with the initial or subsequent PCC rule provisioning. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 15 ETSI TS 129 212 V7.4.0 (2008-04)
+The PCRF may add new event triggers or remove the already provided ones at each request from the PCEF or upon the 
+unsolicited provision from the PCRF. In order to do so, the PCRF shall provide the new complete list of applicable 
+event triggers including the needed provisioned Event-Trigger AVPs in the CCA or RAR commands. 
+The PCRF may remove all previously provided event triggers by providing the Event-Trigger AVP set to the value 
+NO_EVENT_TRIGGERS. When an Event-Trigger AVP is provided with this value, no other Event-Trigger AVP shall 
+be provided in the CCA or RAR command. Upon reception of an Event-Trigger AVP with this value, the PCEF shall 
+not inform PCRF of any event. 
+If no Event-Trigger AVP is included in a CCA or RAR operation, any previously provisioned event trigger will be still 
+applicable. 
+4.5.4 Provisioning of charging related information for the IP-CAN session 
+4.5.4.1 Provisioning of Charging Addresses 
+In combination with the initial PCC rule provisioning only, the PCRF may provide OFCS and/or OCS addresses within 
+a Charging-Information AVP to the PCEF defining the offline and online charging system addresses respectively. These 
+shall overwrite any predefined addresses at the PCEF. Both primary and secondary addresses for OFCS and/or OCS 
+shall be provided simultaneously. Provisioning OFCS or OCS addresses without PCC rules for offline or online charged 
+service data flows, respectively, shall not be considered as an error since such PCC rules may be provided in later 
+provisioning. 
+4.5.4.2 Provisioning of Default Charging Method 
+The default charging method indicates what charging method shall be used for every PCC rule where the charging 
+method is omitted. The PCEF may have a pre-configured Default charging method. 
+Upon the initial interaction with the PCRF, the PCEF shall provide the pre-configured Default charging method if 
+available within the Online AVP and/or Offline AVP embedded directly within the CCR command to the PCRF. 
+Upon the initial interaction with the PCEF, the PCRF may provide default charging method within the Online AVP or 
+Offline AVP embedded directly within the CCA command to the PCEF. The default charging method provided by the 
+PCRF shall overwrite any predefined default charging method at the PCEF. 
+4.5.5 Provisioning and Policy Enforcement of Authorized QoS 
+4.5.5.0 Overview 
+The PCRF may provide authorized QoS to the PCEF. 
+The authorized QoS shall be provisioned within a CCA or RAR Diameter message as QoS-Information AVP. The 
+provisioning of the authorized QoS (which is composed of QCI and bitrates) is performed from the PCRF to the PCEF. 
+The authorized QoS can refer to a PCC rule, to an IP CAN bearer or to QCI. 
+- When the authorized QoS applies to an IP CAN bearer, it shall be provisioned outside a Charging-RuleDefinition AVP and it shall also include the Bearer-Identifier AVP to indicate what bearer it applies to. 
+- When the authorized QoS applies to a PCC rule, it shall be provisioned within the corresponding PCC rule by 
+including the QoS-Information AVP within the Charging-Rule-Definition AVP. The QoS-Information AVP 
+shall not contain a Bearer-Identifier AVP. 
+- When the authorized QoS applies to QCI, authorised MBR per QCI is supplied. In such a case the authorized 
+QoS shall be provisioned outside a Charging-Rule-Definition AVP at the command level. 
+The authorized QoS provides appropriate values for the resources to be enforced. 
+If the PCEF performs the bearer binding, the authorized QoS for a PCC rule is a request for allocating the 
+corresponding resources, and the authorized QoS for a QCI is a request for an upper limit for the MBR that the PCEF 
+assigns to non-GBR bearers with that QCI. The authorized QoS per IP CAN bearer is not applicable. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 16 ETSI TS 129 212 V7.4.0 (2008-04)
+If the PCRF performs the bearer binding, the authorized QoS per IP CAN bearer presents the QoS for this IP CAN 
+bearer. Authorized QoS per QCI is not applicable. 
+The Provisioning of authorized QoS per IP CAN bearer may be performed separate or in combination with the PCC rule 
+provisioning procedure in Clause 4.5.2. The Provisioning of authorized QoS per PCC rule is a part of PCC rule 
+provisioning procedure. 
+If the PCEF cannot allocate any of the resources as authorized by the PCRF, the PCEF should inform the PCRF using 
+the Event-Trigger AVP with the corresponding value. If network initiated procedures apply for the PCC rule and the 
+corresponding IP-CAN bearer can not be established or modified to satisfy the bearer binding, then the PCEF shall 
+reject the activation of a PCC rule using the Gx experimental result code DIAMETER_PCC_BEARER_EVENT and a 
+proper Event-Trigger value. 
+The PCEF is responsible for enforcing the policy based authorization. 
+QoS authorization information may be dynamically provisioned by the PCRF or it can be a pre-defined PCC rule in the 
+PCEF. In case the PCRF provides PCC rules dynamically, authorised QoS information for the IP-CAN bearer 
+(combined QoS) may be provided. For a predefined PCC rule within the PCEF the authorized QoS information shall 
+take affect when the PCC rule is activated. 
+The PCEF shall make sure that the total QoS information of the PCC rules for one IP-CAN bearer does not exceed the 
+authorized QoS information, i.e. the information received from the PCRF. 
+If the PCRF is unable to make a decision for the response to the CC-Request by the PCEF, the PCRF may reject the 
+request as described in subclause 4.5.1. 
+4.5.5.0a Provisioning of authorized QoS per IP CAN bearer 
+The authorized QoS per IP-CAN bearer is used if the bearer binding is performed by the PCRF (as defined in [8]). 
+The PCEF will request the authorization of an IP CAN bearer establishment or modification by the PCRF using the 
+"Request for PCC rules" procedure if the related conditions outlined in Clause 4.5.1 apply. While executing this 
+procedure, the PCEF shall apply the following QoS related procedures: 
+- When the UE request the establishment of a new IP-CAN bearer, the PCEF shall derive the requested QoS 
+information and shall request a new PCC decisions using a CCR command including the requested QoS 
+information within the QoS-Information AVP, in the CCR command to be sent to the PCRF. 
+For GPRS, the PCEF shall use Table 5.3.17 to map the requested QoS within the IP CAN bearer establishment 
+request to the QoS-Information AVP. If the GGSN receives the 'upgrade QoS Supported' flag set to '1' in the 
+Common Flag Information element within the corresponding Create PDP context request (3GPP TS 
+29.060[xx]), the GGSN shall supply the QoS-Upgrade AVP with value QoS_UPGRADE_SUPPORTED. 
+The PCEF shall then wait for the corresponding CCA before replying to the IP-CAN bearer establishment 
+request. 
+- If at any point of time the PCEF receives a request for a modification of an already existing IP-CAN bearer that 
+matches event triggers supplied by the PCRF for the IP CAN session, the PCEF shall also request a new PCC 
+decisions using a CCR command including the corresponding event triggers in the Event-Trigger AVP. If a QoS 
+change for the existing IP-CAN bearer is requested the PCEF shall include the requested QoS information within 
+the QoS-Information AVP in the CCR. 
+For GPRS, the PCEF shall use Table 5.3.17 to map the requested QoS within the IP CAN bearer modification 
+request to the QoS-Information AVP. If the GGSN receives within the corresponding Update PDP context 
+request the 'upgrade QoS Supported' flag in the Common Flag Information element (3GPP TS 29.060[xx]) set to 
+a different value than previously communicated to the PCRF, the GGSN shall supply the QoS-Upgrade AVP 
+indicating the new value. If the GGSN receives within the Update PDP context request the 'No QoS negotiation' 
+flag set to '1' in the Common Flag Information element (3GPP TS 29.060[xx]), the GGSN shall supply the QoSNegotiation AVP with the value NO_QoS_NEGOTIATION. 
+The PCEF shall wait for the corresponding CCA before replying to the IP-CAN bearer modification request. 
+When receiving a CCR with a QoS-Information AVP, the PCRF shall decide upon the requested QoS information 
+within the CCR command. 
+- For GPRS, the following restrictions apply to the PCRF QoS authorization process defined in this clause: 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 17 ETSI TS 129 212 V7.4.0 (2008-04)
+- If the QoS-Negotiation AVP is received by the PCRF indicating that QoS negotiation is not allowed, the 
+PCRF shall provision the requested QoS as authorized QoS. 
+- If the QoS-Upgrade AVP has been received by the PCRF indicating that QoS upgrade is not supported, the 
+PCRF shall not provision an authorized QoS that is higher than the requested QoS. 
+- The PCRF may compare the authorized QoS derived according to Clause 6.3 of 3GPP TS 29.213 with the 
+requested QoS. If the requested QoS is less than the authorised QoS, the PCRF may either request to upgrade the 
+IP CAN QoS by supplying that authorised QoS in the QoS-Information AVP to the PCEF (e.g. if the PCRF has 
+exact knowledge of the required QoS for the corresponding service), or the PCRF may only authorise the 
+requested QoS by supplying the requested QoS in the QoS-Information AVP to the PCEF (e.g. if the PCRF only 
+derives upper limits for the authorized QoS for the corresponding service). If the requested QoS is higher than 
+the authorised QoS, the PCRF shall downgrade the IP CAN QoS by supplying the authorised QoS in the QoSInformation AVP to the PCEF. 
+If for any reason the PCRF cannot authorize the requested QoS (e.g. authorized QoS would exceed the subscribed 
+bandwidth QoS), the PCRF shall indicate to the PCEF that the request is rejected by answering with a CCA command 
+including the Experimental-Result-Code AVP set to the value BEARER_NOT_AUTHORIZED together with the 
+bearer-identifier AVP. Otherwise, the PCRF shall provide a response for the CCR to the PCEF by issueing a CCA 
+command without this experimental result code. The PCRF may use this CCA at the same time for the solicited PCC 
+rule provisioning procedure in Clause 4.5.2. The CCA command shall include a QoS-Information AVP at command 
+level including the Bearer-Identifier AVP used in the corresponding CCR and the authorized QCI and bitrates. If PCRF 
+decides to move rules between bearers, the CCA command shall also include the QoS-Information AVP(s) for the 
+impacted bearers. 
+The PCRF may also decide to modify the authorized QoS per IP CAN bearer if it reveives a CCR with other event 
+triggers, for instance if the PCRF moves PCC rules from one IP-CAN bearer to another (e.g. in GPRS due to a TFT 
+change). The PCRF shall then provision the updated authorized QoS per IP CAN bearer in the CCA within a QoSInformation AVP at command level including the corresponding Bearer-Identifier AVP. 
+The PCRF may decide to modify the authorized QoS per IP CAN bearer at any time. However, if the QoS-Upgrade 
+AVP has been received by the PCRF indicating that QoS upgrade is not supported, the PCRF shall not upgrade the 
+authorized QoS. To to modify the authorized QoS per IP CAN bearer, The PCRF shall send an unsolicited authorization 
+to the PCEF. The unsolicited authorization shall be performed by sending a RAR command to the PCEF and including 
+the QoS-Information AVP(s) with the new authorized values per IP CAN bearer. The PCRF may use this RAR at the 
+same time for the unsolicited PCC rule provisioning procedure in Clause 4.5.2. If the trigger to modify the authorized 
+QoS comes from the AF, before starting an unsolicited provisioning, the PCRF may start a timer to wait for a UE 
+requested corresponding PDP context modification. At the expiry of the timer, if no PCC rule request has previously 
+been received by the PCRF, the PCRF should go on with the unsolicited authorization as explained above. 
+In addition to a provisioning of the "Authorized QoS" per IP CAN Bearer, the PCRF may also provide an authorized 
+QoS per PCC rule. 
+4.5.5.1 Policy enforcement for authorized QoS per IP CAN bearer 
+The PCEF is responsible for enforcing the policy based authorization, i.e. to ensure that the requested QoS is in-line 
+with the "Authorized QoS" per IP CAN Bearer. 
+For GPRS, upon reception of an authorized QoS per IP-CAN bearer within a CCA or RAR command,the PCEF shall 
+perform the mapping from that "Authorised QoS" information for the IP-CAN bearer into authorised UMTS QoS 
+information according to Table 5.3.17.1. The authorised UMTS QoS information is futher processed by the UMTS BS 
+Manager within the GGSN. 
+If the PCEF receives a solicited authorization decision from the PCRF (i.e. a decision within a CCA) and the requested 
+QoS received within the IP-CAN bearer establishment or modification request that triggered the corresponding request 
+for the authorization decision does not match the authorised QoS, the PCEF shall adjust the requested QoS information 
+to the authorised QoS information within the IP-CAN bearer establishment or modification response. 
+The PCEF may store the authorized QoS of an active IP-CAN bearer in order to be able to make local decisions, when 
+the UE requests for an IP-CAN bearer modification. 
+When the PCEF receives an unsolicited authorisation decision from the PCRF (i.e. a decision within a RAR) with 
+updated QoS information for an IP-CAN bearer, the PCEF shall update the stored authorised QoS.If the existing QoS of 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 18 ETSI TS 129 212 V7.4.0 (2008-04)
+the IP-CAN bearer does not match the updated authorised QoS the PCEF shall perform a network initiated IP-CAN 
+bearer modification to adjust the QoS to the authorised level. 
+If the PCEF provide authorized QoS for both, the IP-CAN bearer and PCC rule(s), the enforcement of authorized QoS 
+of the individual PCC rules shall take place first. 
+4.5.5.2 Policy provisioning for authorized QoS per service data flow 
+The Provisioning of authorized QoS per service data flow is a part of PCC rule provisioning procedure, as described in 
+Clause 4.5.2. 
+If the PCRF performs the bearer binding for a service data flow, the PCRF may optionally provision an authorized QoS 
+for that service data flow. If the PCEF performs the bearer binding for a service data flow, the PCRF shall provision an 
+authorized QoS for that service data flow. 
+The authorized QoS per service data flow shall be provisioned within the corresponding PCC rule by including the 
+QoS-Information AVP within the Charging-Rule-Definition AVP in the CCA or RAR commands. This QoSInformation AVP shall not contain a Bearer-Identifier AVP. 
+4.5.5.3 Policy enforcement for authorized QoS per service data flow 
+If an authorized QoS is defined for a PCC rule, the PCEF shall limit the data rate of the service data flow corresponding 
+to that PCC rule not to exceed the maximum requested bandwidth for the PCC rule by discarding packets exceeding the 
+limit. 
+If the PCEF performs the bearer binding, the PCEF shall reserve the resources necessary for the guaranteed bitrate for 
+the PCC rule upon receipt of a PCC rule provisioning including QoS information. For GBR bearers the PCEF should set 
+the bearer"s GBR to the sum of the GBRs of all PCC rules that are active/installed and bound to that GBR bearer. For 
+GBR bearers the PCEF should set the bearer"s MBR to the sum of the MBRs of all PCC rules that are active/installed 
+and bound to that GBR bearer. For non-GBR bearers the PCEF may also set the bearer"s MBR to the sum of the MBRs 
+of all PCC rules that are active and bound to that non-GBR bearer unless that sum exceeds a possibly provisioned 
+authorized QoS per QCI for the bearerer´s QCI (see Clause 4.5.5.6). If an authorized QoS per QCI has been provisioned 
+for the bearer´s QCI, the PCEF should set the bearer"s MBR to the corresponding MBR. The access-specific BS 
+Manager (as included in [8]) within the PCEF receives the authorised access-specific QoS information from the 
+Translation/mapping function. For GPRS, the mapping from the authorized QoS parameters to the UMTS QoS 
+parameters shall be performed according to Table 5.3.17. Then the PCEF shall start the needed procedures to ensure 
+that the provisioned resources are according to the authorized values. This may imply e.g. for GPRS that the PCEF 
+needs to request the establishment of new IP CAN bearer(s) or the modification of existing IP CAN bearer(s). If the 
+enforcement is not successful, the PCEF shall inform the PCRF as described in subclause 4.5.5.0. 
+Upon deactivation or removal of a PCC rule, the PCEF shall free the resources reserved for that PCC rule. 
+If the PCRF provides authorized QoS for both, the IP-CAN bearer and PCC rule(s), the enforcement of authorized QoS 
+of the individual PCC rules shall take place first. 
+4.5.5.4 Coordination of authorized QoS scopes in mixed mode 
+For mixed mode the PCEF will request the authorization of an IP CAN bearer establishment or modification by the 
+PCRF using the "Request for PCC rules" procedure if the related conditions outlined in Clause 4.5.1 apply. The PCEF 
+shall then substract the guaranteed bitrate for the PCC rule it has bound to that IP CAN bearer from the requested QoS 
+of that IP CAN bearer and request the authorization of the remaining QoS from the PCRF within the within the QoSInformation AVP. 
+The PCRF shall authorize the bandwidth for an IP CAN bearer which is required for the PCC rules it has bound to this 
+IP CAN bearer. The PCEF shall add to the PCRF-provisioned authorized bandwidth of an IP CAN bearer the required 
+bandwidth of all PCC rules it has bound to that IP CAN bearer unless the derived MBR value exceeds a possibly 
+provisioned authorized QoS per QCI for the bearerer´s QCI (see Clause 4.5.5.6). 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 19 ETSI TS 129 212 V7.4.0 (2008-04)
+4.5.5.5 Provisioning of authorized QoS per QCI 
+If the PCEF performs the bearer binding, the PCRF may provision an authorized QoS per QCI for non-GBR bearer QCI 
+values. If the PCRF performs the bearer binding the PCRF shall not provision an authorized QoS per QCI. The PCRF 
+shall not provision an authorized QoS per QCI for GBR bearer QCI values. 
+The authorized QoS per QCI shall be provisioned at RAR or CCA command level using the QoS-Information AVP 
+with the QoS-Class-Identifier AVP and the Maximum-Requested-Bandwidth-UL AVP and/or the MaximumRequested-Bandwidth-DL AVP. The Guaranteed Bitrate values shall not be filled up. Multiple QoS-Information AVPs 
+can be used for assigning authorized QoS for several QCIs with one command. The authorized QoS per QCI may be 
+provisioned before or in connection with the activation of the first PCC rule with a certain QCI. The PCRF may also 
+provision a changed authorized QoS per QCI at any time. 
+4.5.5.6 Policy enforcement for authorized QoS per QCI 
+The PCEF can receive an authorized QoS per QCI for non GBR-bearer QCI values. It sets an upper limit for the MBR 
+that the PCEF may assign to a non-GBR bearer with that QCI. If the PCEF receives an authorized QoS per QCI for a 
+non-GBR bearer QCI value, it shall not set a higher MBR for that bearer than the provisioned MBR.The PCEF should 
+assign the authorized MBR per QCI to a non-GBR bearer with that QCI to avoid frequent IP-CAN bearer modifications 
+as PCC rules can be dynamically activated and deactivated. 
+If multiple IP-CAN bearers within the same IP-CAN session are assigned the same QCI, the authorized MBR per QCI 
+applies independently to each of those IP-CAN bearers. 
+The access-specific BS Manager (as included in [8]) within the PCEF receives the authorized access-specific QoS 
+information from the Translation/mapping function. For GPRS, the mapping from the authorized QoS parameters to the 
+UMTS QoS parameters shall be performed according to Table 5.3.17. 
+4.5.6 Indication of IP-CAN Bearer Termination Implications 
+If the last IP CAN bearer within an IP CAN session is being terminated, the PCEF shall apply the procedures in 
+clause 4.5.7 to indicate the IP CAN session termination. 
+Otherwise, the PCEF shall apply the "Indication of IP CAN Bearer Termination Implications" procedure to inform the 
+PCRF about implications of this bearer termination if any of the following conditions apply while the IP-CAN Session 
+remains active: 
+- For GPRS, a PDP context is terminated, which has been initiated by the UE. 
+- PCC rule(s) are disabled due to the termination of the IP CAN bearer. 
+Editor's Note: It is ffs if the indication of bearer termination is also applicable if the provisioned total QoS is reduced 
+compared to what has been provisioned in the Authorized-QoS AVP on session level. 
+The "Indication of IP-CAN Bearer Termination Implications" procedure shall be carried out as part of a Request for 
+PCC rules at IP-CAN session modification. The PCEF shall send a CC-Request with CC-Request-Type AVP set to the 
+value "UPDATE_REQUEST" and shall include the following additional information: 
+- The PCEF shall include the Charging-Rule-Report AVP with the PCC-Rule-Status set to inactive for the affected 
+PCC rules. 
+- For GPRS, when the PCRF performs bearer binding, the PCEF shall also supply the Bearer-Identifier and 
+Bearer-Operation AVPs to indicate "Termination" of a specific bearer. 
+When the PCRF receives the CC-Request indicating the implications of a bearer termination, it shall acknowledge the 
+message by sending a CC-Answer to the PCEF. The PCRF has the option to make a new PCC decision for the affected 
+PCC Rules. Within the CC-answer, the PCRF may provision PCC rules as detailed in clause 4.5.2, e.g. to move PCC 
+rules previously applied to the terminated IP CAN bearer to any of the remaining IP CAN bearer(s). 
+The PCEF shall remove all PCC rules previously applied to the terminated IP CAN bearer, which have not been moved. 
+Signalling flows for the IP-CAN bearer termination and details of the binding mechanism are presented in 
+3GPP TS 29.213 [8]. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 20 ETSI TS 129 212 V7.4.0 (2008-04)
+4.5.7 Indication of IP-CAN Session Termination 
+The PCEF shall contact the PCRF when the IP-CAN session is being terminated (e.g. for GPRS when the last PDP 
+Context within the IP-CAN session is being terminated). The PCEF shall send a CC-Request with CC-Request-Type 
+AVP set to the value "TERMINATION_REQUEST". 
+When the PCRF receives the CC-Request, it shall acknowledge this message by sending a CC-Answer to the PCEF. 
+NOTE: According to DCC procedures, the Diameter Credit Control session is being terminated with this message 
+exchange. 
+Signalling flows for the IP-CAN session termination are presented in 3GPP TS 29.213 [8]. 
+4.5.8 Request of IP-CAN Bearer Termination 
+If the termination of the last IP CAN bearer within an IP CAN session is requested, the PCRF and PCEF shall apply the 
+procedures in clause 4.5.9. 
+Otherwise, the PCRF may request the termination of an existing IP CAN bearer within an IP CAN session by using the 
+PCC rule provisioning procedures in clause 4.5.2 to remove all PCRF-provisioned PCC rules and deactivate all PCC 
+rules predefined within the PCEF, which have been applied to this IP CAN bearer. The PCRF may either completely 
+remove these PCC rules from the IP CAN session or move them to another IP CAN bearer within the IP CAN session. 
+If the selected Bearer Control Mode (BCM) is UE-only, and the PCRF receives a trigger for the removal of all PCC 
+rules bound to an IP CAN bearer from the AF, the following steps apply. In order to avoid race conditions, the PCRF 
+should start a timer to wait for the UE-initiated termination message. If a UE-initiated termination of an IP CAN bearer 
+is performed before timer expiry, the PCRF will receive an Indication of IP-CAN Bearer Termination Implications 
+according to Clause 4.5.6 and shall then not perform the network-initiated termination of that IP CAN bearer. 
+Otherwise, if the timer expires, the PCRF shall remove/deactivate all the PCC rules that have been previously 
+installed/activated for that IP-CAN bearer. 
+If the selected BCM is UE-only, and the PCRF decides to remove all PCC rules bound to an IP CAN bearer due to an 
+internal trigger or trigger from the SPR, the PCRF shall instantly remove/deactivate all the PCC rules that have been 
+previously installed/activated on that IP-CAN bearer. 
+If the selected BCM is NW-only, and the PCRF removes/deactivates at the PCEF, all PCC rules bound to an IP CAN 
+bearer (due to any trigger), the PCEF shall instantly start the procedures to terminate the related IP-CAN bearer. 
+NOTE: If the PCEF performs the IP CAN bearer binding, the PCRF may not be aware that it requests the 
+termination of an IP CAN bearer by removing certain PCC rules. Further details of the binding 
+mechanism can be found in 3GPP TS 29.213 [8]. 
+If no more PCC rules are applied to an IP CAN bearer, the PCEF shall apply IP CAN specific procedures to terminate 
+the IP CAN bearer, if such procedures exist for this IP CAN type. For GPRS, the GGSN shall send a PDP context 
+deactivation request. Furthermore, the PCEF shall apply the indication of IP CAN Bearer Termination procedure in 
+clause 4.5.6. 
+4.5.9 Request of IP-CAN Session Termination 
+The PCRF may request the termination of an IP CAN session by using the PCC rule provisioning procedures in 
+clause 4.5.2 to remove all PCRF-provisioned PCC rules and deactivate all PCC rules predefined within the PCEF, 
+which have been applied to this IP CAN session. 
+If the selected Bearer Control Mode (BCM) is UE-only, and the PCRF receives a trigger for the removal of all PCC 
+rules bound to an IP CAN session from the AF, the following steps apply. In order to avoid race conditions, the PCRF 
+should start a timer to wait for the UE-initiated termination message. If a UE-initiated termination of an IP CAN 
+session is performed before timer expiry, the PCRF will receive an Indication of IP-CAN Session Termination 
+according to Clause 4.5.7 and shall then not perform the network-initiated termination of that IP CAN session. 
+Otherwise, if the timer expires, the PCRF shall remove/deactivate all the PCC rules that have been previously installed 
+or activated for that IP-CAN session. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 21 ETSI TS 129 212 V7.4.0 (2008-04)
+If the selected BCM is UE-only, and the PCRF decides to remove all PCC rules bound to an IP CAN session due to an 
+internal trigger or trigger from the SPR, the PCRF shall instantly remove/deactivate all the PCC rules that have been 
+previously installed or activated on that IP-CAN session. 
+If the selected BCM is NW-only, and the PCRF decides to remove all PCC rules bound to an IP CAN session (due to 
+any trigger), the PCRF shall instantly remove/deactivate all the PCC rules that have been previously installed or 
+activated on that IP-CAN session. 
+If no more PCC rules are applied to an IP CAN session, the PCEF shall apply IP CAN specific procedures to terminate 
+the IP CAN session. For GPRS, the GGSN shall send a PDP context deactivation request with the teardown indicator 
+set to indicate that the termination of the entire IP-CAN session is requested. Furthermore, the PCEF shall apply the 
+indication of IP CAN Session Termination procedure in clause 4.5.7. 
+4.5.10 Bearer Control Mode Selection 
+The PCEF may indicate, via the Gx reference point, a request for Bearer Control Mode (BCM) selection at IP-CAN 
+session establishment or IP-CAN session modification (as a consequence of an SGSN change). It will be done using the 
+PCC rule request procedure. 
+The PCEF will supply, if available, the Bearer-Control-Mode AVP and the Network-Request-Support AVP in the CCRequest with a CC-Request-Type AVP set to the value 'INITIAL_REQUEST'. The Network-Request-Support AVP 
+indicates the access network support of the network requested bearer control. 
+For GPRS, the GGSN shall only include the Network-Request-Support AVP if it supports this procedure and both the 
+UE and the SGSN have previously indicated to the GGSN (refer to 3GPP TS 23.060 [17] and 29.060 [18]) that they 
+also support it. The Bearer-Control-Mode AVP shall be included if the GGSN received it from the SGSN. 
+The PCRF derives the Selected Bearer-Control-Mode AVP based on the received Network-Request-Support AVP, the 
+Bearer-Control-Mode AVP, access network information, subscriber information and operator policy. The Selected 
+Bearer-Control-Mode AVP shall be provided to the PCEF using the PCC Rules provision procedure at IP-CAN session 
+establishment. The PCEF should forward it to the UE. The selected value will be applicable for the whole IP-CAN 
+session (in GPRS, it is applicable to all PDP Contexts within the activated PDP Address/APN pair). 
+The BCM selection procedure can also be triggered as a consequence of a change of SGSN. 
+NOTE: This scenario will likely happen when there is PLMN change that force a BCM change to UE-only due to 
+the lack of support of Nw-only procedures. There are several valid solutions such as enforcing the IPCAN termination, or retaining the IP-CAN session with either all the bearers or only with the bearers with 
+bearer binding related to UE-only procedures. A preferred solution is not specified in Rel-7 and is left as 
+an implementation choice. 
+5 Gx protocol 
+5.1 Protocol support 
+The Gx protocol in the present release is based on Gx protocol defined for Release 6 as specified in 
+3GPP TS 29.210 [2]. However, due to a new paradigm (DCC session for an IP-CAN session) between Release 6 and 
+the present release, the Gx application in the present release has an own vendor specific Diameter application. 
+The Gx application is defined as a vendor specific Diameter application, where the vendor is 3GPP and the ApplicationID for the Gx Application in the present release is 16777238. The vendor identifier assigned by IANA to 3GPP 
+(http://www.iana.org/assignments/enterprise-numbers) is 10415. 
+NOTE: A route entry can have a different destination based on the application identification AVP of the message. 
+Therefore, Diameter agents (relay, proxy, redirection, translation agents) must be configured 
+appropriately to identify the 3GPP Gx application within the Auth-Application-Id AVP in order to create 
+suitable routeing tables. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 22 ETSI TS 129 212 V7.4.0 (2008-04)
+Due to the definition of the commands used in Gx protocol, there is no possibility to skip the Auth-Application-Id AVP 
+and use the Vendor-Specific-Application-Id AVP instead. Therefore the Gx application identification shall be included 
+in the Auth-Application-Id AVP. 
+With regard to the Diameter protocol defined over the Gx interface, the PCRF acts as a Diameter server, in the sense 
+that it is the network element that handles PCC Rule requests for a particular realm. The PCEF acts as the Diameter 
+client, in the sense that is the network element requesting PCC rules in the transport plane network resources. 
+5.2 Initialization, maintenance and termination of connection 
+and session 
+The initialization and maintenance of the connection between each PCRF and PCEF pair is defined by the underlying 
+protocol. Establishment and maintenance of connections between Diameter nodes is described in RFC 3588 [5]. 
+After establishing the transport connection, the PCRF and the PCEF shall advertise the support of the Gx specific 
+Application by including the value of the application identifier in the Auth-Application-Id AVP and the value of the 
+3GPP (10415) in the Vendor-Id AVP of the Vendor-Specific-Application-Id AVP contained in the 
+Capabilities-Exchange-Request and Capabilities-Exchange-Answer commands. The Capabilities-Exchange-Request 
+and Capabilities-Exchange-Answer commands are specified in the Diameter Base Protocol (RFC 3588 [5]). 
+The termination of the Diameter user session is specified in RFC 3588 [5] in clauses 8.4 and 8.5. The description of 
+how to use of these termination procedures in the normal cases is embedded in the procedures description. 
+5.3 Gx specific AVPs 
+Table 5.3.1 describes the Diameter AVPs defined for the Gx reference point, their AVP Code values, types, possible 
+flag values, whether or not the AVP may be encrypted and the applicability of the AVPs to charging control, policy 
+control or both. The Vendor-Id header of all AVPs defined in the present document shall be set to 3GPP (10415). 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 23 ETSI TS 129 212 V7.4.0 (2008-04)
+Table 5.3.1: Gx specific Diameter AVPs 
+ AVP Flag rules (note 1) 
+Attribute Name AVP 
+Code
+Clause 
+defined 
+Value Type 
+(note 2) 
+Must May Should 
+not 
+Must 
+not 
+May 
+Encr.
+Acc. 
+type
+Applica
+bility 
+(note 3)
+Access-Network-ChargingIdentifier-Gx 
+1022 5.3.22 Grouped M,V P Y All CC 
+Bearer-Control-Mode 1023 5.3.23 Enumerated M,V P Y All PC 
+Bearer-Identifier 1020 5.3.20 OctetString M,V P Y GPRS Both 
+Bearer-Operation 1021 5.3.21 Enumerated M,V P Y GPRS Both 
+Bearer-Usage 1000 5.3.1 Enumerated M,V P Y GPRS Both 
+Charging-Rule-Install 1001 5.3.2 Grouped M,V P Y All Both 
+Charging-Rule-Remove 1002 5.3.3 Grouped M,V P Y All Both 
+Charging-Rule-Definition 1003 5.3.4 Grouped M,V P Y All Both 
+Charging-Rule-Base-Name 1004 5.3.5 UTF8String M,V P Y All Both 
+Charging-Rule-Name 1005 5.3.6 OctetString M,V P Y All Both 
+Charging-Rule-Report 1018 5.3.18 Grouped M,V P Y All Both 
+Event-Trigger 1006 5.3.7 Enumerated M,V P Y All Both 
+IP-CAN-Type 1027 5.3.27 Enumerated M, V P Y All Both 
+Guaranteed-Bitrate-DL 1025 5.3.25 Unsigned32 M,V P Y All PC 
+Guaranteed-Bitrate-UL 1026 5.3.26 Unsigned32 M,V P Y All PC 
+Metering-Method 1007 5.3.8 Enumerated M,V P Y All CC 
+Network-Request-Support 1024 5.3.24 Enumerated M, V P Y All PC 
+Offline 1008 5.3.9 Enumerated M,V P Y All CC 
+Online 1009 5.3.10 Enumerated M,V P Y All CC 
+Precedence 1010 5.3.11 Unsigned32 M,V P Y All Both 
+Reporting-Level 1011 5.3.12 Enumerated M,V P Y All CC 
+PCC-Rule-Status 1019 5.3.19 Enumerated M,V P Y All Both 
+QoS-Class-Identifier 1028 5.3.17 Enumerated M,V P Y All Both 
+QoS_Information 1016 5.3.16 Grouped M.V P Y All Both 
+QoS-Negotiation yyyy Enumerated M,V P Y GPRS PC 
+Qos-Upgrade Zzzz Enumerated M.V P Y GPRS PC 
+TFT-Filter 1012 5.3.13 IPFilterRule M,V P Y GPRS Both 
+TFT-Packet-Filter-Information 1013 5.3.14 Grouped M,V P Y GPRS Both 
+ToS-Traffic-Class 1014 5.3.15 OctetString M,V P Y GPRS Both 
+NOTE 1: The AVP header bit denoted as 'M', indicates whether support of the AVP is required. The AVP header bit 
+denoted as 'V', indicates whether the optional Vendor-ID field is present in the AVP header. For further 
+details, see RFC 3588 [4]. 
+NOTE 2: The value types are defined in RFC 3588 [4]. 
+NOTE 3: AVPs marked with 'CC' are applicable to charging control, AVPs marked with 'PC' are applicable to policy 
+control and AVPs marked with 'Both' are applicable to both charging control and policy control. 
+5.3.1 Bearer-Usage AVP (GPRS access type only) 
+The Bearer-Usage AVP (AVP code 1000) is of type Enumerated, and it shall indicate how the bearer is being used. If 
+the Bearer-Usage AVP has not been previously provided, its absence shall indicate that no specific information is 
+available. If the Bearer-Usage AVP has been provided, its value shall remain valid until it is provided the next time. The 
+following values are defined: 
+GENERAL (0) 
+This value shall indicate no specific bearer usage information is available. 
+IMS_SIGNALLING (1) 
+This value shall indicate that the bearer is used for IMS signalling only. 
+Editor's Note: It is for further study whether this AVP applies to I-WLAN or not. 
+5.3.2 Charging-Rule-Install AVP (All access types) 
+The Charging-Rule-Install AVP (AVP code 1001) is of type Grouped, and it is used to activate, install or modify PCC 
+rules as instructed from the PCRF to the PCEF. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 24 ETSI TS 129 212 V7.4.0 (2008-04)
+For installing a new PCC rule or modifying a PCC rule already installed, Charging-Rule-Definition AVP shall be used. 
+For activating a specific PCC rule predefined at the PCEF, Charging-Rule-Name AVP shall be used as a reference for 
+that PCC rule. The Charging-Rule-Base-Name AVP is a reference that may be used for activating a group of PCC rules 
+predefined at the PCEF. 
+For GPRS scenarios where the bearer binding is performed by the PCRF, the Bearer Identifier AVP shall be included as 
+part of Charging-Rule-Install AVP. 
+If present within Charging-Rule-Install AVP, the Bearer-Identifier AVP indicates that the PCC rules within this 
+Charging-Rule-Install AVP shall be installed or activated within the IP CAN bearer identified by the Bearer-Identifier 
+AVP. 
+If no Bearer-Identifier AVP is included within the Charging-Rule-Install AVP, the PCEF shall select an IP CAN bearer 
+for each of the PCC rules within this Charging-Rule-Install AVP, were the PCC rule is installed or activated. 
+AVP Format: 
+Charging-Rule-Install ::= < AVP Header: 1001 > 
+ *[ Charging-Rule-Definition ] 
+ *[ Charging-Rule-Name ] 
+ *[ Charging-Rule-Base-Name ] 
+ [ Bearer-Identifier ] 
+ *[ AVP ] 
+5.3.3 Charging-Rule-Remove AVP (All access types) 
+The Charging-Rule-Remove AVP (AVP code 1002) is of type Grouped, and it is used to deactivate or remove PCC 
+rules from an IP CAN session. 
+Charging-Rule-Name AVP is a reference for a specific PCC rule at the PCEF to be removed or for a specific PCC rule 
+predefined at the PCEF to be deactivated. The Charging-Rule-Base-Name AVP is a reference for a group of PCC rules 
+predefined at the PCEF to be deactivated. 
+AVP Format: 
+Charging-Rule-Remove ::= < AVP Header: 1002 > 
+ *[ Charging-Rule-Name ] 
+ *[ Charging-Rule-Base-Name ] 
+ *[ AVP ] 
+5.3.4 Charging-Rule-Definition AVP (All access types) 
+The Charging-Rule-Definition AVP (AVP code 1003) is of type Grouped, and it defines the PCC rule for a service flow 
+sent by the PCRF to the PCEF. The Charging-Rule-Name AVP uniquely identifies the PCC rule and it is used to 
+reference to a PCC rule in communication between the PCEF and the PCRF within one IP CAN session. The FlowDescription AVP(s) determines the traffic that belongs to the service flow. 
+If optional AVP(s) within a Charging-Rule-Definition AVP are omitted, but corresponding information has been 
+provided in previous Gx messages, the previous information remains valid. If Flow-Description AVP(s) are supplied, 
+they replace all previous Flow-Description AVP(s). If Flows AVP(s) are supplied, they replace all previous Flows 
+AVP(s). 
+Flows AVP may appear if and only if AF-Charging-Identifier AVP is also present. 
+AVP Format: 
+Charging-Rule-Definition ::= < AVP Header: 1003 > 
+ { Charging-Rule-Name } 
+ [ Service-Identifier ] 
+ [ Rating-Group ] 
+ *[ Flow-Description ] 
+ [ Flow-Status ] 
+ [ QoS-Information ] 
+ [ Reporting-Level ] 
+ [ Online ] 
+ [ Offline ] 
+ [ Metering-Method ] 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 25 ETSI TS 129 212 V7.4.0 (2008-04)
+ [ Precedence ] 
+ [ AF-Charging-Identifier ] 
+ *[ Flows ] 
+ *[ AVP ] 
+5.3.5 Charging-Rule-Base-Name AVP (All access types) 
+The Charging-Rule-Base-Name AVP (AVP code 1004) is of type UTF8String, and it indicates the name of a 
+pre-defined group of PCC rules residing at the PCEF. 
+5.3.6 Charging-Rule-Name AVP (All access types) 
+The Charging-Rule-Name AVP (AVP code 1005) is of type OctetString, and it defines a name for PCC rule. For PCC 
+rules provided by the PCRF it uniquely identifies a PCC rule within one IP CAN session. For PCC rules pre-defined at 
+the PCEF it uniquely identifies a PCC rule within the PCEF. 
+5.3.7 Event-Trigger AVP (All access types) 
+The Event-Trigger AVP (AVP code 1006) is of type Enumerated. When sent from the PCRF to the PCEF the EventTrigger AVP indicates an event that shall cause a re-request of PCC rules. When sent from the PCEF to the PCRF the 
+Event-Trigger AVP indicates that the corresponding event has occurred at the gateway. 
+NOTE: An exception to the above is the Event Trigger AVP set to NOT_EVENT_TRIGGERS, that indicates that 
+PCEF shall not notify PCRF of any event. 
+Whenever the PCRF subscribes to one or more event triggers by using the RAR command, the PCEF shall send the 
+corresponding currently applicable values (e.g. 3GPP-SGSN-Address AVP or 3GPP-SGSN-IPv6-Address AVP, 3GPPRAT-Type, 3GPP-User-Location-Info, etc.) to the PCRF in the RAA if available, and in this case, the Event-Trigger 
+AVPs shall not be included. 
+Whenever one of these events occurs, the PCEF shall send the related AVP that has changed together with the event 
+trigger indication. 
+Unless stated for a specific value, the Event-Trigger AVP applies to all access types. 
+The following values are defined: 
+SGSN_CHANGE (0) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon the change of the 
+serving SGSN PCC rules shall be requested. When used in a CCR command, this value indicates that the PCEF 
+generated the request because the serving SGSN changed. The new value of the serving SGSN shall be indicated 
+in either 3GPP-SGSN-Address AVP or 3GPP-SGSN-IPv6-Address AVP. Applicable only for GPRS. 
+QOS_CHANGE (1) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon any QoS change (even 
+within the limits of the current authorization) at bearer level PCC rules shall be requested. When used in a CCR 
+command, this value indicates that the PCEF generated the request because there has been a change in the 
+requested QoS for a specific bearer (e.g. the previously maximum authorized QoS has been exceeded). The 
+Bearer-Identifier AVP shall be provided to indicate the affected bearer. QoS-Information AVP is required to be 
+provided in the same request with the new value. 
+RAT_CHANGE (2) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a RAT change PCC 
+rules shall be requested. When used in a CCR command, this value indicates that the PCEF generated the request 
+because of a RAT change. The new RAT type shall be provided in the 3GPP-RAT-Type AVP. Applicable only 
+for GPRS. 
+TFT_CHANGE (3) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a TFT change at bearer 
+level PCC rules shall be requested. When used in a CCR command, this value indicates that the PCEF generated 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 26 ETSI TS 129 212 V7.4.0 (2008-04)
+the request because of a change in the TFT. The Bearer-Identifier AVP shall be provided to indicate the affected 
+bearer. The new TFT values shall be provided in TFT-Packet-Filter-Information AVP. Applicable only for 
+GPRS. 
+PLMN_CHANGE (4) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a PLMN change PCC 
+rules shall be requested. When used in a CCR command, this value indicates that the PCEF generated the request 
+because there was a change of PLMN. 3GPP-SGSN-MCC-MNC AVP shall be provided in the same request with 
+the new value. Applicable only for GPRS. 
+LOSS_OF_BEARER (5) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon loss of bearer, GW 
+should inform PCRF. When used in a CCR command, this value indicates that the PCEF generated the request 
+because the bearer associated with the PCC rules indicated by the corresponding Charging Rule Report AVP was 
+lost. The PCC-Rule-Status AVP within the Charging Rule Report AVP shall indicate that these PCC rules are 
+temporary inactive. Applicable for those access-types that handle multiple bearers within one single IP-CAN 
+session (e.g. GPRS). 
+The mechanism of indicating loss of bearer to the GW is IP-CAN access type specific. For GPRS, this is 
+indicated by a PDP context modification request with Maximum Bit Rate (MBR) in QoS profile changed to 0 
+kbps. 
+When the PCRF performs the bearer binding, the PCEF shall provide the Bearer-Identifier AVP to indicate the 
+bearer that has been lost. 
+RECOVERY_OF_BEARER (6) 
+This value shall be in CCA and RAR commands by the PCRF used to indicate that upon recovery of bearer, GW 
+should inform PCRF. When used in a CCR command, this value indicates that the PCEF generated the request 
+because the bearer associated with the PCC rules indicated by the corresponding Charging Rule Report AVP was 
+recovered. The PCC-Rule-Status AVP within the Charging Rule Report AVP shall indicate that these rules are 
+active again. Applicable for those access-types that handle multiple bearers within one single IP-CAN session 
+(e.g. GPRS). 
+The mechanism for indicating recovery of bearer to the GW is IP-CAN access type specific. For GPRS, this is 
+indicated by a PDP context modification request with Maximum Bit Rate (MBR) in QoS profile changed from 0 
+kbps to a valid value. 
+When the PCRF performs the bearer binding, the PCEF shall provide the Bearer-Identifier AVP to indicate the 
+bearer that has been recovered. 
+IP-CAN_CHANGE (7) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a change in the IP-CAN 
+type PCC rules shall be requested. When used in a CCR command, this value indicates that the PCEF generated 
+the request because there was a change of IP-CAN type. IP-CAN-Type AVP shall be provided in the same 
+request with the new value. For 3GPP IP-CAN type value, 3GPP-RAT-Type AVP shall also be provided. 
+GW/PCEF_MALFUNCTION (8) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a failure in the 
+enforcement of PCC rules due to GW/PCEF malfunction, the PCEF shall inform the PCRF. 
+When used in a CCR or RAA command, this value indicates that the PCEF generated the request or answer due 
+to a malfunction in the PCEF the PCC rules cannot be enforced. The affected PCC rules will be provided in the 
+Charging-Rule-Report AVP. 
+When PCRF performs the bearer binding, the PCEF must provide the Bearer-Identifier AVP for the affected 
+bearer and should provide the Charging-Rule-Report AVP to indicate what PCC rules are affected within that 
+bearer. In this case, absence of the Charging-Rule-Report AVP means that all provided PCC rules for that 
+specific bearer are affected. 
+When the PCEF performs the bearer binding, the PCEF should provide the Charging-Rule-Report AVP to 
+indicate the PCC rules that are affected. In this case, absence of Charging-Rule-Report AVP means that all the 
+PCC rules for the corresponding IP-CAN session are affected. 
+RESOURCES_LIMITATION (9) 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 27 ETSI TS 129 212 V7.4.0 (2008-04)
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a failureto provide the 
+required resource for the service flows described by the PCC rules, the PCEF shall inform the PCRF. 
+When used in a CCR or RAA command, this value indicates that the PCEF generated the request or answer 
+because of resource limitation. The affected PCC rules will be provided in the Charging-Rule-Report AVP. 
+When the PCRF performs the bearer binding, the PCEF shall provide the Bearer-Identifier for the affected 
+bearer. In this case, absence of the Charging-Rule-Report AVP means that all provided PCC rules for that 
+specific bearer are affected. Otherwise, only the PCC rules included in Charging-Rule-Report AVP are affected. 
+MAX_NR_BEARERS_REACHED (10) 
+This value shall be used in CCA and RAR commands by the PCRF to subscribe to this event. If the PCRF 
+subscribes to this event, the PCEF shall inform the PCRF whenever a failure in the enforcement of PCC rules 
+occurs due to the maximum number of bearer have been reached for the IP-CAN session, PCEF shall inform 
+PCRF. 
+When used in a CCR or RAA command, this value indicates that the PCEF generated the request or answer 
+because the PCC rules cannot be enforced since the IP-CAN session already contains the maximum number of 
+bearers allowed. The affected PCC rules will be provided in the Charging-Rule-Report AVP. 
+QOS_CHANGE_EXCEEDING_AUTHORIZATION (11) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that only upon a requested QoS 
+change beyond the current authorized value(s) at bearer level PCC rules shall be requested. When used in a CCR 
+or RAA command, this value indicates that the PCEF generated the request or answer because there has been a 
+change in the requested QoS beyond the authorized value(s) for a specific bearer. The Bearer-Identifier AVP 
+shall be provided to indicate the affected bearer. QoS-Information AVP is required to be provided in the same 
+request with the new value. 
+RAI_CHANGE (12) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a change in the RAI, 
+PCEF shall inform the PCRF. When used in a CCR command, this value indicates that the PCEF generated the 
+request because there has been a change in the RAI. The new RAI value shall be provided in the RAI AVP. If 
+the user location has been changed but the PCEF can not get the detail location information for some reasons 
+(eg. handover from 3G to 2G network), the PCEF shall send the RAI AVP to the PCRF by setting the LAC of 
+the RAI to value 0x0000. Applicable only for GPRS. 
+USER_LOCATION_CHANGE (13) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that upon a change in the user 
+location, PCEF shall inform the PCRF. When used in a CCR command, this value indicates that the PCEF 
+generated the request because there has been a change in the user location. The new location value shall be 
+provided in the 3GPP-User-Location-Info AVP. If the user location has been changed but the PCEF can not get 
+the detail location information for some reasons (eg. handover from 3G to 2G network), the PCEF shall send the 
+3GPP-User-Location-Info AVP to the PCRF by setting the LAC of the CGI/SAI to value 0x0000. Applicable 
+only for GPRS. 
+NO_EVENT_TRIGGER (14) 
+This value shall be used in CCA and RAR commands by the PCRF to indicate that PCRF does not require any 
+Event Trigger notification. 
+5.3.8 Metering-Method AVP (All access types) 
+The Metering-Method AVP (AVP code 1007) is of type Enumerated, and it defines what parameters shall be metered 
+for offline charging. The PCEF may use the AVP for online charging in case of decentralized unit determination, refer 
+to 3GPP TS 32.299 [19]. 
+The following values are defined: 
+DURATION (0) 
+This value shall be used to indicate that the duration of the service flow shall be metered. 
+VOLUME (1) 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 28 ETSI TS 129 212 V7.4.0 (2008-04)
+This value shall be used to indicate that volume of the service flow traffic shall be metered. 
+DURATION_VOLUME (2) 
+This value shall be used to indicate that the duration and the volume of the service flow traffic shall be metered. 
+If the Metering-Method AVP is omitted but has been supplied previously, the previous information remains valid. If the 
+Metering-Method AVP is omitted and has not been supplied previously, the metering method pre-configured at the 
+PCEF is applicable as default metering method. 
+5.3.9 Offline AVP (All access types) 
+The Offline AVP (AVP code 1008) is of type Enumerated. 
+If the Offline AVP is embedded within a Charging_Rule-Definition AVP it defines whether the offline charging 
+interface from the PCEF for the associated PCC rule shall be enabled. The absence of this AVP within the first 
+provisioning of the Charging-Rule-definition AVP of a new PCC rule indicates that the default charging method for 
+offline shall be used. 
+If the Offline AVP is embedded within the initial CCR on command level, it indicates the default charging method for 
+offline pre-configured at the PCEF is applicable as default charging method for offline. The absence of this AVP within 
+the initial CCR indicates that the charging method for offline pre-configured at the PCEF is not available. 
+If the Offline AVP is embedded within the initial CCA on command level, it indicates the default charging method for 
+offline. The absence of this AVP within the initial CCA indicates that the charging method for offline pre-configured at 
+the PCEF is applicable as default charging method for offline. 
+The default charging method provided by the PCRF shall take precedence over any pre-configured default charging 
+method at the PCEF. 
+The following values are defined: 
+DISABLE_OFFLINE (0) 
+This value shall be used to indicate that the offline charging interface for the associated PCC rule shall be 
+disabled. 
+ENABLE_OFFLINE (1) 
+This value shall be used to indicate that the offline charging interface for the associated PCC rule shall be 
+enabled. 
+5.3.10 Online AVP (All access types) 
+The Online AVP (AVP code 1009) is of type Enumerated. 
+If the Online AVP is embedded within a Charging_Rule-Definition AVP, it defines whether the online charging 
+interface from the PCEF for the associated PCC rule shall be enabled. The absence of this AVP within the first 
+provisioning of the Charging-Rule-Definition AVP of a new PCC rule indicates that the default charging method for 
+online shall be used. 
+If the Online AVP is embedded within the initial CCR on command level, it indicates the default charging method for 
+online pre-configured at the PCEF is applicable as default charging method for online. The absence of this AVP within 
+the initial CCR indicates that the charging method for online pre-configured at the PCEF is not available. 
+If the Online AVP is embedded within the initial CCA on command level, it indicates the default charging method for 
+online. The absence of this AVP within the initial CCA indicates that the charging method for online pre-configured at 
+the PCEF is applicable as default charging method for online. 
+The default charging method provided by the PCRF shall take precedence over any pre-configured default charging 
+method at the PCEF. 
+The following values are defined: 
+DISABLE_ONLINE (0) 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 29 ETSI TS 129 212 V7.4.0 (2008-04)
+This value shall be used to indicate that the online charging interface for the associated PCC rule shall be 
+disabled. 
+ENABLE_ONLINE (1) 
+This value shall be used to indicate that the online charging interface for the associated PCC rule shall be 
+enabled. 
+5.3.11 Precedence AVP (All access types) 
+The Precedence AVP (AVP code 1010) is of type Unsigned32. 
+Within the Charging Rule Definition AVP, the Precedence AVP determines the order, in which the service data flow 
+templates are applied at service data flow detection at the PCEF. A PCC rule with the Precedence AVP with lower 
+value shall be applied before a PCC rule with the Precedence AVP with higher value. 
+The Precedence AVP is also used within the TFT-Packet-Filter-Information AVP to indicate the evaluation precedence 
+of the Traffic Mapping Information filters (for GPRS the TFT packet filters) as received from the UE. The PCEF shall 
+assign a lower value in the corresponding Precedence AVP to a Traffic Mapping Information filter with a higher 
+evaluation precedence than to a Traffic Mapping Information filter with a lower evaluation precedence. 
+5.3.12 Reporting-Level AVP (All access types) 
+The Reporting-Level AVP (AVP code 1011) is of type Enumerated, and it defines on what level the PCEF reports the 
+usage for the related PCC rule. The following values are defined: 
+SERVICE_IDENTIFIER_LEVEL (0) 
+ This value shall be used to indicate that the usage shall be reported on service id and rating group combination 
+level. 
+RATING_GROUP_LEVEL (1) 
+This value shall be used to indicate that the usage shall be reported on rating group level. 
+If the Reporting-Level AVP is omitted but has been supplied previously, the previous information remains valid. If the 
+Reporting-Level AVP is omitted and has not been supplied previously, the reporting level pre-configured at the PCEF is 
+applicable as default reporting level. 
+5.3.13 TFT-Filter AVP (GPRS access type only) 
+The TFT-Filter AVP (AVP code 1012) is of type IPFilterRule, and it contains the flow filter for one TFT packet filter. 
+The TFT-Filter AVP is derived from the Traffic Flow Template (TFT) defined in 3GPP TS 24.008 [13]. The following 
+information shall be sent: 
+- Action shall be set to "permit". 
+- Direction shall be set to "out". 
+- Protocol shall be set to the value provided within the TFT packet filter parameter "Protocol Identifier/Next 
+Header Type". If the TFT packet filter parameter "Protocol Identifier/Next Header Type" is not provided within 
+the TFT packet filter, Protocol shall be set to "ip". 
+- Source IP address (possibly masked). The source IP address shall be derived from TFT packet filter parameters 
+"Source address" and "Subnet Mask". The source IP address shall be set to "any", if no such information is 
+provided in the TFT packet filter. 
+- Source and destination port (single value, list or ranges). The information shall be derived from the 
+corresponding TFT packet filter parameters. Source and/or destination port(s) shall be omitted if such 
+information is not provided in the TFT packet filter. 
+- The Destination IP address shall be set to "assigned". 
+The IPFilterRule type shall be used with the following restrictions: 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 30 ETSI TS 129 212 V7.4.0 (2008-04)
+- No options shall be used. 
+- The invert modifier "!" for addresses shall not be used. 
+The direction "out" refers to downlink direction. 
+5.3.14 TFT-Packet-Filter-Information AVP (GPRS access type only) 
+The TFT-Packet-Filter-Information AVP (AVP code 1013) is of type Grouped, and it contains the information from a 
+single TFT packet filter including the evaluation precedence, the filter and the Type-of-Service/Traffic Class sent from 
+the PCEF to the PCRF. The PCEF shall include one TFT-Packet-Filter-Information AVP for each TFT packet filters 
+applicable at a PDP context in separate TFT-Packet-Filter-Information AVPs within each PCC rule request. 
+corresponding to that PDP context. TFT-Packet-Filter-Information AVPs are derived from the Traffic Flow Template 
+(TFT) defined in 3GPP TS 24.008 [13]. 
+AVP Format: 
+TFT-Packet-Filter-Information ::= < AVP Header: 1013 > 
+ [ Precedence ] 
+ [ TFT-Filter ] 
+ [ ToS-Traffic-Class ] 
+5.3.15 ToS-Traffic-Class AVP (GPRS access type only) 
+The ToS-Traffic-Class AVP (AVP code 1014) is of type OctetString, and it contains the Type-of-Service/Traffic-Class 
+of a TFT packet filter as defined in 3GPP TS 24.008 [13]. 
+5.3.16 QoS-Information AVP (All access types) 
+The QoS-Information AVP (AVP code 1016) is of type Grouped, and it defines the QoS information for an IP-CAN 
+bearer, PCC rule or QCI. When this AVP is sent from the PCEF to the PCRF, it indicates the requested QoS 
+information for an IP CAN bearer. When this AVP is sent from the PCRF to the PCEF, it indicates the authorized QoS 
+for an IP CAN bearer (when appearing at CCA or RAR command level or a service flow (when included within the 
+PCC rule) or a QCI (when appearing at CCA or RAR command level with the QoS-Class-Identifier AVP and the 
+Maximum-Requested-Bandwidth-UL AVP and/or the Maximum-Requested-Bandwidth-DL AVP). 
+The QoS class identifier identifies a set of IP-CAN specific QoS parameters that define QoS, excluding the applicable 
+bitrates. It is applicable both for uplink and downlink direction. 
+The Max-Requested-Bandwidth-UL defines the maximum bit rate allowed for the uplink direction. 
+The Max-Requested-Bandwidth-DL defines the maximum bit rate allowed for the downlink direction. 
+The Guaranteed-Bitrate-UL defines the guaranteed bit rate allowed for the uplink direction. 
+The Guaranteed-Bitrate-DL defines the guaranteed bit rate allowed for the downlink direction. 
+The Bearer Identifier AVP shall be included as part of the QoS-Information AVP if the QoS information refers to an IP 
+CAN bearer initiated by the UE and the PCRF performs the bearer binding. The Bearer Identifier AVP identifies this 
+bearer. Several QoS-Information AVPs for different Bearer Identifiers may be provided per command. 
+If the QoS-Information AVP has been supplied previously but is omitted in a Diameter message or AVP, the previous 
+information remains valid. If the QoS-Information AVP has not been supplied from the PCRF to the PCEF previously 
+and is omitted in a Diameter message or AVP, no enforcement of the authorized QoS shall be performed. 
+AVP Format: 
+QoS-Information ::= < AVP Header: 1016 > 
+ [ QoS-Class-Identifier ] 
+ [ Max-Requested-Bandwidth-UL ] 
+ [ Max-Requested-Bandwidth-DL ] 
+ [ Guaranteed-Bitrate-UL ] 
+ [ Guaranteed-Bitrate-DL ] 
+ [ Bearer-Identifier ] 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 31 ETSI TS 129 212 V7.4.0 (2008-04)
+5.3.17 QoS-Class-Identifier AVP (All access types) 
+QoS-Class-Identifier AVP (AVP code 1028) is of type Enumerated, and it identifies a set of IP-CAN specific QoS 
+parameters that define the authorized QoS, excluding the applicable bitrates for the IP-CAN bearer or service flow. The 
+following values are defined: 
+The mapping of QCI to UMTS QoS parameters for GPRS is shown in the following table (coming from TS 23.203 [7] 
+Annex A table A.3): 
+Table 5.3.17.1: Gx specific Diameter AVPs 
+QoS-Class- UMTS QoS parameters 
+Identifier AVP 
+Value 
+Traffic Class THP Signalling 
+Indication 
+Source 
+Statistics 
+Descriptor 
+1 Conversational n/a n/a speech 
+(NOTE) 
+2 Conversational n/a n/a unknown 
+3 Streaming n/a n/a speech 
+(NOTE) 
+4 Streaming n/a n/a unknown 
+5 Interactive 1 Yes n/a 
+6 Interactive 1 No n/a 
+7 Interactive 2 No n/a 
+8 Interactive 3 No n/a 
+9 Background n/a n/a n/a 
+NOTE: The QCI values that map to "speech" should be selected for service data flows 
+consisting of speech (and the associated RTCP) only. 
+5.3.18 Charging-Rule-Report AVP (All access types) 
+The Charging-Rule-Report AVP (AVP code 1018) is of types Grouped, and it is used to report the status of PCC rules. 
+Charging-Rule-Name AVP is a reference for a specific PCC rule at the PCEF that has been successfully installed, 
+modified or removed (for dynamic PCC rules), or activated or deactivated (for predefined PCC rules) because of trigger 
+from the MS. Charging-Rule-Base-Name AVP is a reference for a group of PCC rules predefined at the PCEF that has 
+been successfully activated or deactivated because of trigger from the MS. 
+The Charging-Rule-Report AVP can also be used to report the status of the PCC rules which cannot be 
+installed/activated at the PCEF. In this condition, the Charging-Rule-Name AVP is used to indicate a specific PCC rule 
+which cannot be installed/activated, and the Charging-Rule-Base-Name AVP is used to indicate a group of PCC rules 
+which cannot be activated. 
+AVP Format: 
+Charging-Rule-Report ::= < AVP Header: 1018 > 
+ *[Charging-Rule-Name] 
+ *[Charging-Rule-Base-Name] 
+ [PCC-Rule-Status] 
+ *[AVP] 
+Multiple instances of Charging-Rule-Report AVPs shall be used in the case it is required to report different PCC-RuleStatus values for different groups of rules within the same Diameter command. 
+5.3.19 PCC-Rule-Status AVP (All access types) 
+The PCC-Rule-Status AVP (AVP code 1019) is of type Enumerated, and describes the status of one or a group of PCC 
+Rules. 
+The following values are defined: 
+ACTIVE (0) 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 32 ETSI TS 129 212 V7.4.0 (2008-04)
+This value is used to indicate that the PCC rule(s) are successfuly installed (for those provisioned from PCRF) or 
+activated (for those pre-provisioned in PCEF) 
+INACTIVE (1) 
+This value is used to indicate that the PCC rule(s) are removed (for those provisioned from PCRF) or inactive 
+(for those pre-provisioned in PCEF) 
+TEMPORARY INACTIVE (2) 
+This value is used to indicate that, for some reason (e.g. loss of bearer), already installed or activated PCC rules 
+are temporary disabled. 
+5.3.20 Bearer-Identifier AVP (Applicable access type GPRS) 
+The Bearer-Identifier AVP (AVP code 1020) is of type OctetString, and it indicates the bearer to which specific 
+information refers. 
+When present within a CC-Request Diameter command, subsequent AVPs within the CC-Request refer to the specific 
+bearer identified by this AVP. 
+The bearer identifier of an IP CAN bearer shall be unique within the corresponding IP CAN session. The bearer 
+identifier shall be selected by the PCEF. 
+5.3.21 Bearer-Operation AVP (Applicable access type GPRS) 
+The Bearer-Operation AVP (AVP code 1021) is of type of Enumerated, and it indicates the bearer event that causes a 
+request for PCC rules. This AVP shall be supplied if the bearer event relates to an IP CAN bearer initiated by the UE. 
+The following values are defined: 
+TERMINATION (0) 
+This value is used to indicate that a bearer is being terminated. 
+ESTABLISHMENT (1) 
+This value is used to indicate that a new bearer is being established. 
+MODIFICATION (2) 
+This value is used to indicate that an existing bearer is being modified. 
+5.3.22 Access-Network-Charging-Identifier-Gx AVP (All access types) 
+The Access-Network-Charging-Identifier-Gx AVP (AVP code 1022) is of type Grouped. It contains a charging 
+identifier (e.g. GCID) within the Access-Network-Charging-Identifier-Value AVP and the related PCC rule name(s) 
+within the Charging-Rule-Name AVP(s). If the IP CAN session contains only a single IP CAN bearer, no ChargingRule-Name AVPs or Charging-Rule-Base-Name AVPs need to be provided. Otherwise, all the Charging-Rule-Name 
+AVPs or Charging-Rule-Base-Name AVPs corresponding to PCC rules activated or installed within the IP CAN bearer 
+corresponding to the provided Access-Network-Charging-Identifier-Value shall be included. 
+The Access-Network-Charging-Identifier-Gx AVP can be sent from the PCEF to the PCRF. The PCRF may use this 
+information for charging correlation towards the AF. 
+AVP Format: 
+Access-Network-Charging-Identifier-Gx ::= < AVP Header: 1022 > 
+ { Access-Network-Charging-Identifier-Value} 
+ *[ Charging-Rule-Base-Name ] 
+ *[ Charging-Rule-Name ] 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 33 ETSI TS 129 212 V7.4.0 (2008-04)
+5.3.23 Bearer-Control Mode AVP 
+The Bearer-Control-Mode AVP (AVP code 1023) is of type of Enumerated. When sent from PCEF to PCRF, it 
+indicates the UE preferred bearer control mode. When sent from PCRF to PCEF, it indicates the PCRF selected bearer 
+control mode. 
+If the Bearer-Control-Mode AVP has not been previously provided by the PCEF, its absence shall indicate the value 
+UE_ONLY. If the Bearer-Control AVP has been provided, its value shall remain valid until it is provided the next time. 
+The following values are defined: 
+UE_ONLY (0) 
+This value is used to indicate that the UE shall request any additional bearer establishment. 
+NW_ONLY (1) 
+This value is used to indicate that the PCEF shall request any additional bearer establishment. 
+UE_NW (2) 
+This value is used to indicate that both the UE and PCEF may request any additional bearer establishment and 
+add own traffic mapping information to an IP-CAN bearer. 
+5.3.24 Network Request Support AVP 
+The Network-Request-Support AVP (AVP code 1024) is of type of Enumerated and indicates the UE and network 
+support of the network requested bearer control mode. 
+If the Network Request Support AVP has not been previously provided, its absence shall indicate the value 
+NETWORK_REQUEST NOT SUPPORTED. If the Network Request Support AVP has been provided, its value shall 
+remain valid until it is provided the next time. 
+The following values are defined: 
+NETWORK_REQUEST NOT SUPPORTED (0) 
+This value is used to indicate that the UE and the access network do not support the bearer establishment request 
+procedure. 
+NETWORK_REQUEST SUPPORTED (1) 
+This value is used to indicate that the UE and the access network support the bearer establishment request 
+procedure. 
+5.3.25 Guaranteed-Bitrate-DL AVP 
+The Guaranteed-Bitrate-DL AVP (AVP code 1025) is of type Unsigned32, and it indicates the guaranteed bitrate in bits 
+per second for a downlink service data flow. The bandwidth contains all the overhead coming from the IP-layer and the 
+layers above, e.g. IP, UDP, RTP and RTP payload. 
+5.3.26 Guaranteed-Bitrate-UL AVP 
+The Guaranteed –Bitrate-UL AVP (AVP code 1026) is of type Unsigned32, and it indicates the guaranteed bitrate in 
+bits per second for an uplink service data flow. The bandwidth contains all the overhead coming from the IP-layer and 
+the layers above, e.g. IP, UDP, RTP and RTP payload. 
+5.3.27 IP-CAN-Type AVP (All access types) 
+The IP-CAN-Type AVP (AVP code 1027) is of type Enumerated, and it shall indicate the type of Connectivity Access 
+Network in which the user is connected. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 34 ETSI TS 129 212 V7.4.0 (2008-04)
+The IP-CAN-Type AVP shall always be present during the IP-CAN session establishment. During an IP-CAN session 
+modification, this AVP shall be present when there has been a change in the IP-CAN type and the PCRF requested to be 
+informed of this event. The Event-Trigger AVP with value IP-CAN CHANGE shall be provided together with the IPCAN-Type AVP. 
+The following values are defined: 
+3GPP (0) 
+This value shall be used to indicate that the IP-CAN is associated with a 3GPP access and is further detailed by 
+the 3GPP-RAT-Type AVP. 
+DOCSIS (1) 
+This value shall be used to indicate that the IP-CAN is associated with a DOCSIS access. 
+xDSL (2) 
+This value shall be used to indicate that the IP-CAN is associated with an xDSL access. 
+WiMAX (3) 
+This value shall be used to indicate that the IP-CAN is associated with a WiMAX access (IEEE 802.16). 
+3GPP2 (4) 
+This value shall be used to indicate that the IP-CAN is associated with a 3GPP2 access. 
+5.3.28 QoS-Negotiation AVP (GPRS Access Type only) 
+The QoS-Negotiation AVP (AVP code yyyy) is of type Enumerated. The value of the AVP indicates for a single PCC 
+rule request if the PCRF is allowed to negotiate the QoS by supplying in the answer to this request an authorized QoS 
+different from the requested QoS. 
+The following values are defined: 
+NO_QoS_NEGOTIATION (0) 
+This value indicates that a QoS negotiation is not allowed for the corresponding PCC rule request. 
+QoS_NEGOTIATION_SUPPORTED (1) 
+This value indicates that a QoS negotiation is allowed for the corresponding PCC rule request. This is the default 
+value applicable if this AVP is not supplied 
+5.3.29 QoS-Upgrade AVP (GPRS Access Type only) 
+The QoS-Upgrade AVP (AVP code zzzz) is of type Enumerated. The value of the AVP indicates whether the SGSN 
+supports that the GGSN upgrades the QoS in a Create PDP context response or Update PDP context response. If the 
+SGSN does not support a QoS upgrade, the PCRF shall not provision an authorized QoS which is higher than the 
+requested QoS for this IP CAN bearer. The setting is applicable to the bearer indicated in the request within the BearerIdentifier AVP. 
+If no QoS-Upgrade AVP has been supplied for an IP CAN bearer, the default value 
+QoS_UPGRADE_NOT_SUPPORTED is applicable. If the QoS-Upgrade AVP has previously been supplied for an IP 
+CAN bearer but is not supplied in a new PCC rule request, the previously supplied value remains applicable. 
+The following values are defined: 
+QoS_UPGRADE_NOT_SUPPORTED (0) 
+This value indicates that the IP-CAN bearer does not support the upgrading of the requested QoS. This is the 
+default value applicable if no QoS-Upgrade AVP has been supplied for an IP CAN bearer. 
+QoS_UPGRADE_SUPPORTED (1) 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 35 ETSI TS 129 212 V7.4.0 (2008-04)
+This value indicates that the IP-CAN bearer supports the upgrading of the requested QoS. 
+5.4 Gx re-used AVPs 
+Table 5.4 lists the Diameter AVPs re-used by the Gx reference point from existing Diameter Applications, reference to 
+their respective specifications, short description of their usage within the Gx reference point and the applicability of the 
+AVPs to charging control, policy control or both. Other AVPs from existing Diameter Applications, except for the 
+AVPs from Diameter base protocol, do not need to be supported. The AVPs from Diameter base protocol are not 
+included in table 5.4, but they are re-used for the Gx reference point. Where 3GPP Radius VSAs are re-used, they shall 
+be translated to Diameter AVPs as described in RFC 4005 [12] with the exception that the 'M' flag shall be set and the 
+'P' flag may be set. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 36 ETSI TS 129 212 V7.4.0 (2008-04)
+Table 5.4: Gx re-used Diameter AVPs 
+Attribute Name Reference Description Acc. 
+type 
+Applicablity 
+(note 1) 
+3GPP-RAT-Type 3GPP TS 29.061 
+[11] 
+Indicate which Radio Access Technology is currently 
+serving the UE. 
+GPRS Both 
+3GPP-SGSNAddress 
+3GPP TS 29.061 
+[11] 
+For GPRS the IPv4 address of the SGSN GPRS Both 
+3GPP-SGSN-IPv6-
+Address 
+3GPP TS 29.061 
+[11] 
+For GPRS the IPv6 address of the SGSN GPRS Both 
+3GPP-SGSNMCC-MNC 
+3GPP TS 29.061 
+[11] 
+For GPRS the MCC and the MNC of the SGSN GPRS Both 
+3GPP-UserLocation-Info 
+3GPP TS 29.061 
+[11] 
+For GPRS indicates details of where the UE is 
+currently located (e.g. SAI or CGI) 
+GPRS Both 
+Access-NetworkCharging-Address 
+3GPP TS 29.214 
+[10] 
+Indicates the IP Address of the network entity within 
+the access network performing charging (e.g. the 
+GGSN IP address). 
+All CC 
+Access-NetworkCharging-IdentifierValue 
+3GPP TS 29.214 
+[10] 
+Contains a charging identifier (e.g. GCID). All CC 
+AF-ChargingIdentifier 
+3GPP TS 29.214 
+[10] 
+The AF charging identifier that may be used in 
+charging correlation. For IMS the ICID. This AVP may 
+only be included in a Charging-Rule_Definition AVP if 
+the SERVICE_IDENTIFIER_LEVEL reporting is being 
+selected with the Reporting-Level AVP. 
+All CC 
+Called-Station-ID IETF RFC 4005 
+[12] 
+The address the user is connected to. For GPRS the 
+APN. 
+All Both 
+CC-RequestNumber 
+IETF RFC 4006 [9] The number of the request for mapping requests and 
+answers 
+All Both 
+CC-Request-Type IETF RFC 4006 [9] The type of the request (initial, update, termination) All Both 
+ChargingInformation 
+3GPP TS 29.229 
+[14] 
+The Charging-Information AVP is of type Grouped, 
+and contains the addresses of the charging functions 
+in the following AVPs: 
+• Primary-Event-Charging-Function-Name is of 
+type DiameterURI and defines the address of 
+the primary online charging system. The 
+protocol definition in the DiameterURI shall 
+be either omitted or supplied with value 
+"Diameter". 
+• Secondary-Event-Charging-Function-Name 
+is of type DiameterURI and defines the 
+address of the secondary online charging 
+system for the bearer. The protocol definition 
+in the DiameterURI shall be either omitted or 
+supplied with value "Diameter". 
+• Primary-Charging-Collection-Function-Name 
+is of type DiameterURI and defines the 
+address of the primary offline charging 
+system for the bearer. If the GTP' protocol is 
+applied on the Gz interface as specified in 
+3GPP TS 32.295 [16], the protocol definition 
+in the DiameterURI shall be omitted. If 
+Diameter is applied on the Gz interface, the 
+protocol definition in DiameterURI shall be 
+either omitted or supplied with value 
+"Diameter". The choice of the applied 
+protocol on the Gz interface depends upon 
+configuration in the PCEF. 
+• Secondary-Charging-Collection-FunctionName is of type DiameterURI and defines 
+the address of the secondary offline charging 
+system for the bearer. If the GTP' protocol is 
+applied on the Gz interface as specified in 
+3GPP TS 32.295 [16], the protocol definition 
+in the DiameterURI shall be omitted. If 
+Diameter is applied on the Gz interface, the 
+protocol definition in DiameterURI shall be 
+either omitted or supplied with value 
+All CC 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 37 ETSI TS 129 212 V7.4.0 (2008-04)
+Attribute Name Reference Description Acc. 
+type 
+Applicablity 
+(note 1) 
+"Diameter". The choice of the applied 
+protocol on the Gz interface depends upon 
+configuration in the PCEF. 
+Flow-Description 3GPP TS 29.214 
+[10] 
+Defines the service flow filter parameters for a PCC 
+rule 
+All Both 
+Flows 3GPP TS 29.214 
+[10] 
+The flow identifiers of the IP flows related to a PCC 
+rule as provided by the AF. May be only used in 
+charging correlation together with AF-ChargingIdentifier AVP. 
+All CC 
+Flow-Status 3GPP TS 29.214 
+[10] 
+Defines whether the service flow is enabled or 
+disabled. The value "REMOVED" is not applicable for 
+Gx. 
+All Both 
+Framed-IPAddress 
+IETF RFC 4005 
+[12] 
+The IPv4 address allocated for the user. All Both 
+Framed-IPv6-Prefix IETF RFC 4005 
+[12] 
+The IPv6 address prefix allocated for the user. 
+The encoding of the value within this Octet String type 
+AVP shall be as defined in IETF RFC 3162 [15], 
+Clause 2.3. The "Reserved", "Prefix-Length" and 
+"Prefix" fields shall be included in this order. 
+All Both 
+Max-RequestedBandwidth-UL 
+(note 2) 
+3GPP TS 29.214 
+[10] 
+Defines the maximum authorized bandwidth for uplink. All PC 
+Max-RequestedBandwidth-DL 
+(note 2) 
+3GPP TS 29.214 
+[10] 
+Defines the maximum authorized bandwidth for 
+downlink. 
+All PC 
+RAI 3GPP TS 29.061 
+[11] 
+Contains the Routing Area Identity of the SGSN 
+where the UE is registered 
+GPRS Both 
+Rating-Group IETF RFC 4006 [9] The charging key for the PCC rule used for rating 
+purposes 
+All CC 
+Service-Identifier IETF RFC 4006 [9] The identity of the service or service component the 
+service data flow in a PCC rule relates to. 
+All CC 
+Subscription-Id IETF RFC 4006 [9] The identification of the subscription (IMSI, MSISDN, 
+etc) 
+All Both 
+User-EquipmentInfo 
+IETF RFC 4006 [9] The identification and capabilities of the terminal 
+(IMEISV, etc.) 
+When the User-Equipment-Info-Type is set to 
+IMEISV(0), the value within the User-Equipment-InfoValue shall be a UTF-8 encoded decimal. 
+All Both 
+NOTE 1: AVPs marked with 'CC' are applicable to charging control, AVPs marked with 'PC' are applicable to policy 
+control and AVPs marked with 'Both' are applicable to both charging control and policy control. 
+NOTE 2: When sending from the PCRF to the PCEF, the Max-Requested-Bandwidth-UL/DL AVP indicate the maximum 
+allowed bit rate for the uplink/downlink direction; when sending from the PCEF to the PCRF, the MaxRequested-Bandwidth-UL/DL AVP indicate the maximum requested bit rate for the uplink/downlink direction. 
+5.5 Gx specific Experimental-Result-Code AVP values 
+5.5.1 General 
+RFC 3588 [5] specifies the Experimental-Result AVP containing Vendor-ID AVP and Experimental-Result-Code AVP. 
+The Experimental-Result-Code AVP (AVP Code 298) is of type Unsigned32 and contains a vendor-assigned value 
+representing the result of processing a request. The Vendor-ID AVP shall be set to 3GPP (10415). 
+5.5.2 Success 
+Result Codes that fall within the Success category are used to inform a peer that a request has been successfully 
+completed. 
+The Result-Code AVP values defined in Diameter BASE RFC 3588 [5] shall be applied. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 38 ETSI TS 129 212 V7.4.0 (2008-04)
+5.5.3 Permanent Failures 
+Errors that fall within the Permanent Failures category shall be used to inform the peer that the request failed, and 
+should not be attempted again. 
+The Result-Code AVP values defined in Diameter BASE RFC 3588 [5] are applicable. Also the following specific Gx 
+Experimental-Result-Codes values are defined: 
+DIAMETER_ERROR_INITIAL_PARAMETERS (5140) 
+ This error shall be used when the set of bearer or session or subscriber information needed by the PCRF for rule 
+selection is incomplete or erroneous or not available for the decision to be made. (e.g. QoS, SGSN address, RAT 
+type, TFT, subscriber information) 
+DIAMETER_ERROR_TRIGGER_EVENT (5141) 
+ This error shall be used when the set of bearer/session information sent in a CCR originated due to a trigger 
+event been met is incoherent with the previous set of bearer/session information for the same bearer/session. (e.g 
+event trigger met was RAT changed, and the RAT notified is the same as before) 
+DIAMETER_PCC_RULE_EVENT (5142) 
+This error shall be used when for some reason the PCC rules cannot be installed/activated. The reason will be 
+provided in the Event Trigger AVP value. Affected PCC-Rules will be provided in the Charging-Rule-Report 
+AVP. Absence of the Charging-Rule-Report means that all provided PCC rules for that specific bearer/session 
+are affected. 
+BEARER_NOT_AUTHORIZED (5143) 
+This error shall be used when the PCRF cannot authorize an IP-CAN bearer (e.g. the subscribed QoS has been 
+exceeded) upon the reception of an IP-CAN bearer authorization request coming from the PCEF. The affected 
+IP-CAN bearer is the one that triggered the corresponding CCR. The PCEF shall reject the attempt to initiate or 
+modify the bearer indicated in the related CCR command. 
+5.5.4 Transient Failures 
+Errors that fall within the transient failures category are used to inform a peer that the request could not be satisfied at 
+the time it was received, but may be able to satisfy the request in the future. 
+The Result-Code AVP values defined in Diameter Base RFC 3588 [5] are applicable. Also the following specific Gx 
+Experimental-Result-Code value is defined for transient failures: 
+DIAMETER_PCC_BEARER_EVENT (4xxx) 
+This error shall be used when for some reason a PCC rule cannot be enforced or modified successfully in a 
+network initiated procedure. The reason will be provided in the Event Trigger AVP value. Affected PCC-Rules 
+will be provided in the Charging-Rule-Report AVP. 
+5.6 Gx Messages 
+5.6.1 Gx Application 
+Gx Messages are carried within the Diameter Application(s) described in clause 5.1. 
+Existing Diameter command codes from the Diameter base protocol RFC 3588 [5] and the Diameter Credit Control 
+Application RFC 4006 [9] are used with the Gx specific AVPs specified in clause 5.3. The Diameter Credit Control 
+Application AVPs and AVPs from other Diameter applications that are re-used are defined in clause 5.4. Due to the 
+definition of these commands there is no possibility to skip the Auth-Application-Id AVP and use the Vendor-SpecificApplication-Id AVP instead. Therefore the Gx application identifier shall be included in the Auth-Application-Id AVP. 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 39 ETSI TS 129 212 V7.4.0 (2008-04)
+In order to support both PULL and PUSH procedures, a diameter session needs to be established for each IP-CAN 
+session. For IP-CAN types that support multiple IP-CAN bearers (as in the case of GPRS), the diameter session is 
+established when the very first IP-CAN bearer for the IP-CAN session is established. 
+NOTE: Some of the AVPs included in the messages formats below are in bold to highlight that these AVPs are 
+used by this specific protocol and do not belong to the original message definition in the DCC 
+Application RFC 4006 [9] or Diameter Base Protocol RFC 3588 [5]. 
+5.6.2 CC-Request (CCR) Command 
+The CCR command, indicated by the Command-Code field set to 272 and the 'R' bit set in the Command Flags field, is 
+sent by the PCEF to the PCRF in order to request PCC rules for a bearer. The CCR command is also sent by the PCEF 
+to the PCRF in order to indicate bearer or PCC rule related events or the termination of the IP CAN bearer and/or 
+session. 
+Message Format: 
+<CC-Request> ::= < Diameter Header: 272, REQ, PXY > 
+ < Session-Id > 
+ { Auth-Application-Id } 
+ { Origin-Host } 
+ { Origin-Realm } 
+ { Destination-Realm } 
+ { CC-Request-Type } 
+ { CC-Request-Number } 
+ [ Destination-Host ] 
+ [ Origin-State-Id ] 
+ *[ Subscription-Id ] 
+ [ Bearer-Control-Mode ] 
+[ Network-Request-Support ] 
+ [ Bearer-Identifier ] 
+ [ Bearer-Operation ] 
+ [ Framed-IP-Address ] 
+ [ Framed-IPv6-Prefix ] 
+ [ IP-CAN-Type ] 
+ [ 3GPP-RAT-Type ] 
+ [ Termination-Cause ] 
+ [ User-Equipment-Info ] 
+ [ QoS-Information ] 
+ [ QoS-Negotiation ] 
+ [ QoS-Upgrade ] [ 3GPP-SGSN-MCC-MNC ] 
+ [ 3GPP-SGSN-Address ] 
+ [ 3GPP-SGSN-IPv6-Address ] 
+ [ RAI ] 
+ [ 3GPP-User-Location-Info] 
+ [ Called-Station-ID ] 
+ [ Bearer-Usage ] 
+ [ Online ] 
+ [ Offline ] 
+ *[ TFT-Packet-Filter-Information ] 
+ *[ Charging-Rule-Report] 
+ *[ Event-Trigger] 
+ [ Access-Network-Charging-Address ] 
+ *[ Access-Network-Charging-Identifier-Gx ] 
+ *[ Proxy-Info ] 
+ *[ Route-Record ] 
+ *[ AVP ] 
+5.6.3 CC-Answer (CCA) Command 
+The CCA command, indicated by the Command-Code field set to 272 and the 'R' bit cleared in the Command Flags 
+field, is sent by the PCRF to the PCEF in response to the CCR command. It is used to provision PCC rules and event 
+triggers for the bearer/session and to provide the selected bearer control mode for the IP-CAN session. If the PCRF 
+performs the bearer binding, PCC rules will be provisioned at bearer level. The primary and secondary CCF and/or 
+primary and secondary OCS addresses may be included in the initial provisioning. 
+Message Format: 
+<CC-Answer> ::= < Diameter Header: 272, PXY > 
+ < Session-Id > 
+ { Auth-Application-Id } 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 40 ETSI TS 129 212 V7.4.0 (2008-04)
+ { Origin-Host } 
+ { Origin-Realm } 
+ [ Result-Code ] 
+ [ Experimental-Result ] 
+ { CC-Request-Type } 
+ { CC-Request-Number } 
+ [ Bearer-Control-Mode ] 
+ *[ Event-Trigger ] 
+ [ Origin-State-Id ] 
+ *[ Charging-Rule-Remove ] 
+ *[ Charging-Rule-Install ] 
+ [ Charging-Information ] 
+ [ Online ] 
+ [ Offline ] 
+ *[ QoS-Information ] 
+ [ Error-Message ] 
+ [ Error-Reporting-Host ] 
+ *[ Failed-AVP ] 
+ *[ Proxy-Info ] 
+ *[ Route-Record ] 
+ *[ AVP ] 
+5.6.4 Re-Auth-Request (RAR) Command 
+The RAR command, indicated by the Command-Code field set to 258 and the 'R' bit set in the Command Flags field, is 
+sent by the PCRF to the PCEF in order to provision PCC rules using the PUSH procedure initiate the provision of 
+unsolicited PCC rules. It is used to provision PCC rules and event triggers for the session. If the PCRF performs the 
+bearer binding, PCC rules will be provisioned at bearer level. 
+NOTE: If the RAR command is received by the PCEF without providing any operation on PCC rules or any QoS 
+information, the PCEF will respond with a CCR command requesting PCC rules. 
+Message Format: 
+<RA-Request> ::= < Diameter Header: 258, REQ, PXY > 
+ < Session-Id > 
+ { Auth-Application-Id } 
+ { Origin-Host } 
+ { Origin-Realm } 
+ { Destination-Realm } 
+ { Destination-Host } 
+ { Re-Auth-Request-Type } 
+ [ Origin-State-Id ] 
+ *[ Event-Trigger ] 
+ *[ Charging-Rule-Remove ] 
+ *[ Charging-Rule-Install ] 
+ *[ QoS-Information ] 
+ *[ Proxy-Info ] 
+ *[ Route-Record ] 
+ *[ AVP] 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 41 ETSI TS 129 212 V7.4.0 (2008-04)
+5.6.5 Re-Auth-Answer (RAA) Command 
+The RAA command, indicated by the Command-Code field set to 258 and the 'R' bit cleared in the Command Flags 
+field, is sent by the PCEF to the PCRF in response to the RAR command. 
+Message Format: 
+<RA-Answer> ::= < Diameter Header: 258, PXY > 
+ < Session-Id > 
+ { Origin-Host } 
+ { Origin-Realm } 
+ [ Result-Code ] 
+ [ Experimental-Result ] 
+ [ Origin-State-Id ] 
+ [ Event-Trigger ] 
+ *[ Charging-Rule-Report] 
+ [ Access-Network-Charging-Address ] 
+ *[ Access-Network-Charging-Identifier-Gx ] 
+ [ Bearer-Identifier ] 
+ [ Error-Message ] 
+ [ Error-Reporting-Host ] 
+ *[ Failed-AVP ] 
+ *[ Proxy-Info ] 
+ *[ AVP ] 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 42 ETSI TS 129 212 V7.4.0 (2008-04)
+Annex A (informative): 
+Change history 
+Date TSG # TSG Doc. CR Rev Subject/Comment Old New 
+11/11/2005 Includes the following TDOCs agreed at CT3#38: 
+C3-050692, C3-050834, C3-050835, C3-050843, C3-050846 
+0.0.0 0.1.0 
+17/02/2006 Includes the following TDOCs agreed at CT3#39: 
+C3-060130, C3-060131, C3-060132, C3-060140 
+0.1.0 0.2.0 
+12/05/2006 Includes the following TDOCs agreed at CT3#40: 
+C3-060199, C3-060200, C3-060255, C3-060259, C3-060260 
+0.2.0 0.3.0 
+13/09/2006 Includes the following TDOCs agreed at CT3#41: 
+C3-060378, C3-060379, C3-060382, C3-060434, C3-060438, 
+C3-060439, C3-060441, C3-060443, C3-060445, C3-060536, 
+C3-060551 
+0.3.0 0.4.0 
+09/11/2006 Includes the following TDOCs agreed at CT3#42: 
+C3-060786, C3-060854, C3-060750, C3-060595, C3-060848, 
+C3-060753, C3-060630, C3-060755, C3-060849, C3-060829, 
+C3-060866, C3-060756, C3-060700, C3-060851 
+0.4.0 0.5.0 
+01/12/2006 TSG#33 CP-060636 Editorial update by MCC for presentation to TSG CT for information 0.3.0 1.0.0 
+22/02/2007 Includes the following TDOCs agreed at CT3#43: 
+C3-070050, C3-070084, C3-070137, C3-070166, C3-070175, 
+C3-070212, C3-070239, C3-070244, C3-070245, C3-070246, 
+C3-070268 
+1.0.0 1.1.0 
+28/02/2007 TSG#35 CP-060097 Editorial update by MCC for presentation to TSG CT for approval 1.1.0 2.0.0 
+03-2007 MCC update to version 7.0.0 after approval at TSG CT#35 2.0.0 7.0.0 
+06-2007 TSG#36 CP-070419 001 1 IP-CAN session specific charging 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070420 004 11 Handling of Authorized QoS 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 005 2 Subscription to notification of Loss of AF signalling 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 006 1 Routeing of Diameter commands - Gx 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070420 007 5 QoS change event 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 008 PCC rule without Flow-Description AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 009 1 Addition and removal of event triggers 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 010 2 Metering-Method AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 011 2 Reporting-Level AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 012 1 PCC-Rule-Status AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 013 Charging-Information AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 014 1 PCC-Rule-Event AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 015 Corrections to Reused AVPs 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 016 4 Precedence AVP 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 017 6 Mixed Mode 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070419 018 2 Correction to where binding should be 7.0.0 7.1.0 
+06-2007 TSG#36 CP-070420 024 1 Alignment of the QoS information 7.0.0 7.1.0 
+09-2007 TSG#37 CP-070555 025 Usage of Event-Trigger AVP in RAA 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 027 Correct inconsistent name of re-used AVPs 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 031 2 Combine different sets of authorized QoS information 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 033 1 Precedence of the PCC rule 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 034 3 Experimental-Result-Code for the IP-CAN session rejection 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 036 1 Several bearer QoS-Authorization AVP(s) in the same command 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 037 2 Bearer Identifier handling in Event Trigger reporting 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 039 2 Removal of Editor"s Notes 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 041 2 Location based PCC decisions and Event Triggers 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 042 IP-CAN Type AVP missing in commands 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 043 1 BCM change due to handover 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 048 Support of Authorisation Token in Gx 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070556 049 3 Extension of IP-CAN-Type AVP to specify non-3GPP IP-CANs 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 051 1 Authorized QoS per QCI 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 052 Applicability to charging or policy control 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 053 2 IP-CAN bearer operation failure 7.1.0 7.2.0 
+09-2007 TSG#37 CP-070555 054 Gx Application Id 7.1.0 7.2.0 
+056 Add Bearer-Identifier AVP in RAA message 
+057 Alignment for the Indication of IP-CAN Bearer Termination 
+Implications 
+058 5 Correction of default charging method over Gx interface 
+061 2 Clarify the ambiguous name of Max-Requested-Bandwidth-UL/DL 
+AVPs 
+12-2007 TSG#38 CP-070726
+062 2 Authorized QoS per QCI provisioned in CCA 
+7.2.0 7.3.0 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7 43 ETSI TS 129 212 V7.4.0 (2008-04)
+064 3 Modify the description of Charging-Rule-Report AVP 
+067 2 Adding 3GPP-User-Location-Info AVP in CCR message 
+068 1 Removing unnecessary and ambiguous text from the ChargingRule-Install section 
+069 AVP applicability to charging or policy control 
+03-2008 TSG#39 CP-080040 071 Adding clarification around the encoding of the IMEISV 7.3.0 7.4.0 
+03-2008 TSG#39 CP-080040 072 1 Reporting the current event related value by the event trigger 7.3.0 7.4.0 
+03-2008 TSG#39 CP-080040 073 1 PDP Session 7.3.0 7.4.0 
+03-2008 TSG#39 CP-080040 074 Metering method for online charging 7.3.0 7.4.0 
+03-2008 TSG#39 CP-080040 077 4 Support of access capabilities for QoS control in PCC 7.3.0 7.4.0 
+ETSI 
+3GPP TS 29.212 version 7.4.0 Release 7

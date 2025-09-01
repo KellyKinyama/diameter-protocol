@@ -1,8 +1,8 @@
 // lib/applications/session_management.dart
 
 import 'dart:typed_data';
-import '../core/diameter_message2.dart';
-import '../core/avp_dictionary.dart';
+import '../core/diameter_message3.dart';
+import '../core/avp_dictionary2.dart';
 import 'base/capabilities_exchange.dart';
 
 class DiameterSessionManager {
@@ -68,7 +68,7 @@ class DiameterSessionManager {
       flags: 0, // Answer
       hopByHopId: dpr.hopByHopId,
       endToEndId: dpr.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
@@ -130,7 +130,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: dwr.hopByHopId,
       endToEndId: dwr.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
@@ -156,7 +156,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: acr.hopByHopId,
       endToEndId: acr.endToEndId,
-      avpList: [
+      avps: [
         acr.getAVP(AVP_SESSION_ID)!,
         AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -185,7 +185,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: str.hopByHopId,
       endToEndId: str.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromString(AVP_SESSION_ID, sessionId),
         AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -203,7 +203,7 @@ class DiameterSessionManager {
       flags: DiameterMessage.FLAG_ERROR,
       hopByHopId: request.hopByHopId,
       endToEndId: request.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, resultCode),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),
@@ -301,10 +301,48 @@ class DiameterSessionManager {
       flags: 0, // This is an Answer
       hopByHopId: ccr.hopByHopId,
       endToEndId: ccr.endToEndId,
-      avpList: responseAvps,
+      avps: responseAvps,
     );
   }
 }
+
+/// Creates a Session-Termination-Request (STR) message.
+/// See RFC 6733 Section 8.4.1 for details.
+// class SessionTerminationRequest extends DiameterMessage {
+//   SessionTerminationRequest({
+//     required String sessionId,
+//     required String originHost,
+//     required String originRealm,
+//     required String destinationRealm,
+//     required int authApplicationId,
+//     int terminationCause = 1, // 1 = DIAMETER_LOGOUT
+//   }) : super(
+//          length:
+//              20 +
+//              [
+//                AVP.fromString(AVP_SESSION_ID, sessionId),
+//                AVP.fromString(AVP_ORIGIN_HOST, originHost),
+//                AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+//                AVP.fromString(AVP_DESTINATION_REALM, destinationRealm),
+//                AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, authApplicationId),
+//                AVP.fromEnumerated(AVP_TERMINATION_CAUSE, terminationCause),
+//              ].fold(0, (sum, avp) => sum + avp.getPaddedLength()),
+//          commandCode: CMD_SESSION_TERMINATION,
+//          applicationId: authApplicationId,
+//          flags: DiameterMessage.FLAG_REQUEST | DiameterMessage.FLAG_PROXYABLE,
+//          hopByHopId: DiameterMessage.generateId(),
+//          endToEndId: DiameterMessage.generateId(),
+//          version: 1,
+//          avps: [
+//            AVP.fromString(AVP_SESSION_ID, sessionId),
+//            AVP.fromString(AVP_ORIGIN_HOST, originHost),
+//            AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+//            AVP.fromString(AVP_DESTINATION_REALM, destinationRealm),
+//            AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, authApplicationId),
+//            AVP.fromEnumerated(AVP_TERMINATION_CAUSE, terminationCause),
+//          ],
+//        );
+// }
 
 /// Creates a Session-Termination-Request (STR) message.
 /// See RFC 6733 Section 8.4.1 for details.
@@ -316,23 +354,12 @@ class SessionTerminationRequest extends DiameterMessage {
     required String destinationRealm,
     required int authApplicationId,
     int terminationCause = 1, // 1 = DIAMETER_LOGOUT
-  }) : super(
-         length:
-             20 +
-             [
-               AVP.fromString(AVP_SESSION_ID, sessionId),
-               AVP.fromString(AVP_ORIGIN_HOST, originHost),
-               AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-               AVP.fromString(AVP_DESTINATION_REALM, destinationRealm),
-               AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, authApplicationId),
-               AVP.fromEnumerated(AVP_TERMINATION_CAUSE, terminationCause),
-             ].fold(0, (sum, avp) => sum + avp.getPaddedLength()),
+  }) : super.fromFields(
          commandCode: CMD_SESSION_TERMINATION,
          applicationId: authApplicationId,
          flags: DiameterMessage.FLAG_REQUEST | DiameterMessage.FLAG_PROXYABLE,
          hopByHopId: DiameterMessage.generateId(),
          endToEndId: DiameterMessage.generateId(),
-         version: 1,
          avps: [
            AVP.fromString(AVP_SESSION_ID, sessionId),
            AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -340,6 +367,29 @@ class SessionTerminationRequest extends DiameterMessage {
            AVP.fromString(AVP_DESTINATION_REALM, destinationRealm),
            AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, authApplicationId),
            AVP.fromEnumerated(AVP_TERMINATION_CAUSE, terminationCause),
+         ],
+       );
+}
+
+/// Creates a Session-Termination-Answer (STA) message.
+/// See RFC 6733 Section 8.4.2 for details.
+class SessionTerminationAnswer extends DiameterMessage {
+  SessionTerminationAnswer.fromRequest(
+    DiameterMessage request, {
+    required int resultCode,
+    required String originHost,
+    required String originRealm,
+  }) : super.fromFields(
+         commandCode: CMD_SESSION_TERMINATION,
+         applicationId: request.applicationId,
+         flags: 0, // This is an answer
+         hopByHopId: request.hopByHopId,
+         endToEndId: request.endToEndId,
+         avps: [
+           request.getAVP(AVP_SESSION_ID)!,
+           AVP.fromUnsigned32(AVP_RESULT_CODE, resultCode),
+           AVP.fromString(AVP_ORIGIN_HOST, originHost),
+           AVP.fromString(AVP_ORIGIN_REALM, originRealm),
          ],
        );
 }

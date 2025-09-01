@@ -1,23 +1,10 @@
-// lib/core/diameter_message.dart
+// lib/core/diameter_message2.dart
 
 import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:io';
-import 'avp_dictionary.dart';
 
-// A simple map for pretty printing command codes in the toString() method.
-const COMMANDS = {
-  257: "Capabilities-Exchange",
-  280: "Device-Watchdog",
-  272: "Credit-Control",
-  271: "Accounting",
-  275: "Session-Termination",
-  282: "Disconnect-Peer",
-  258: "Re-Auth",
-  274: "Abort-Session",
-  316: "Update-Location",
-  318: "Authentication-Information",
-};
+import 'dart:io';
+import 'dart:typed_data';
+import 'avp_dictionary.dart';
 
 class DiameterMessage {
   // --- Header Flags ---
@@ -35,6 +22,7 @@ class DiameterMessage {
   final int endToEndId;
   final List<AVP> avps;
 
+  // Main generative constructor
   DiameterMessage({
     required this.version,
     required this.length,
@@ -46,31 +34,26 @@ class DiameterMessage {
     required this.avps,
   });
 
-  factory DiameterMessage.fromFields({
-    required int commandCode,
-    required int applicationId,
-    required int flags,
-    required int hopByHopId,
-    required int endToEndId,
-    required List<AVP> avpList,
-    int version = 1,
-  }) {
+  /// Static helper method to calculate the total message length.
+  static int _calculateLength(List<AVP> avpList) {
     int totalLength = 20; // Header size
     for (final avp in avpList) {
       totalLength += avp.getPaddedLength();
     }
-
-    return DiameterMessage(
-      version: version,
-      length: totalLength,
-      flags: flags,
-      commandCode: commandCode,
-      applicationId: applicationId,
-      hopByHopId: hopByHopId,
-      endToEndId: endToEndId,
-      avps: avpList,
-    );
+    return totalLength;
   }
+
+  /// CORRECTED: Now a generative constructor, not a factory.
+  /// It uses the static helper to calculate length for the initializer list.
+  DiameterMessage.fromFields({
+    required this.commandCode,
+    required this.applicationId,
+    required this.flags,
+    required this.hopByHopId,
+    required this.endToEndId,
+    required this.avps,
+    this.version = 1,
+  }) : length = _calculateLength(avps);
 
   factory DiameterMessage.decode(Uint8List data) {
     if (data.length < 20) {
@@ -147,7 +130,8 @@ class DiameterMessage {
   @override
   String toString() {
     final avpStrings = avps.map((avp) => '    $avp').join('\n');
-    final commandName = COMMANDS[commandCode] ?? commandCode.toString();
+    final commandName =
+        COMMAND_CODE_TO_NAME[commandCode] ?? commandCode.toString();
     return 'Diameter Message:\n'
         '  Version: $version, Length: $length, Flags: 0x${flags.toRadixString(16)}\n'
         '  Command Code: $commandName, Application ID: $applicationId\n'
@@ -161,7 +145,7 @@ class AVP {
   final int code;
   final int flags;
   final int vendorId;
-  final Uint8List? data;
+  Uint8List? data;
   final List<AVP>? avps;
 
   AVP({
@@ -205,13 +189,16 @@ class AVP {
     var rawAddress = InternetAddress(ipAddress).rawAddress;
     var data = Uint8List(2 + rawAddress.length);
     var byteData = ByteData.view(data.buffer);
-    byteData.setUint16(0, rawAddress.length == 4 ? 1 : 2);
+    byteData.setUint16(
+      0,
+      rawAddress.length == 4 ? 1 : 2,
+    ); // 1 for IPv4, 2 for IPv6
     data.setRange(2, data.length, rawAddress);
     return AVP(code: code, data: data);
   }
 
   factory AVP.fromGrouped(int code, List<AVP> avps) {
-    return AVP(code: code, avps: avps, flags: 0x40);
+    return AVP(code: code, avps: avps, flags: 0);
   }
 
   factory AVP.decode(Uint8List rawAvp) {
@@ -223,24 +210,24 @@ class AVP {
     int offset = 8;
     int vendorId = 0;
     if ((flags & 0x80) != 0) {
+      // 'V' bit for Vendor-ID
       vendorId = byteData.getUint32(8);
       offset = 12;
     }
 
     final data = rawAvp.sublist(offset, length);
 
-    // --- THIS IS THE CRITICAL FIX ---
-    // If the 'M' (Mandatory/Grouped) flag is set, recursively decode the data payload.
-    if ((flags & 0x40) != 0) {
-      List<AVP> innerAvps = [];
-      int innerOffset = 0;
-      while (innerOffset < data.length) {
-        final innerAvp = AVP.decode(data.sublist(innerOffset));
-        innerAvps.add(innerAvp);
-        innerOffset += innerAvp.getPaddedLength();
-      }
-      return AVP(code: code, flags: flags, avps: innerAvps, vendorId: vendorId);
-    }
+    // If the 'M' (Mandatory) flag is set in RFC 3588, it indicates a Grouped AVP
+    // but the 'V' bit is the vendor-specific flag. The grouped nature is
+    // determined by the AVP definition, not a flag. The client/server
+    // logic must know which AVP codes are grouped.
+    // However, for robust decoding, if we find AVPs inside, it's grouped.
+    // A better approach is often to have a dictionary indicating which AVPs are grouped.
+    // For now, we will rely on how it's constructed. The fix here is to correctly
+    // distinguish between data and nested AVPs on construction/encoding.
+    // The previous `decode` was likely correct; the error was in how Grouped AVPs
+    // were encoded on the server side (in session_manager).
+    // Let's assume a Grouped AVP has a non-null avps list and null data.
 
     return AVP(code: code, flags: flags, data: data, vendorId: vendorId);
   }
@@ -256,7 +243,7 @@ class AVP {
 
   int getPaddedLength() {
     final length = getLength();
-    return (length + 3) & ~3;
+    return (length + 3) & ~3; // Align to 4-byte boundary
   }
 
   Uint8List encode() {
@@ -303,8 +290,11 @@ class AVP {
       } else if (data != null) {
         if (data!.length == 4) {
           valueStr = 'Unsigned32(${ByteData.view(data!.buffer).getUint32(0)})';
-        } else {
+        } else if (data!.every((b) => b >= 32 && b <= 126)) {
+          // Check if it's printable ASCII
           valueStr = 'UTF8String("${utf8.decode(data!)}")';
+        } else {
+          valueStr = 'OctetString(${data.toString()})';
         }
       } else {
         valueStr = 'Empty';

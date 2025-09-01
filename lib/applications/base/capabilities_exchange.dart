@@ -1,8 +1,8 @@
 // lib/applications/base/capabilities_exchange.dart
 
 import 'dart:io';
-import '../../core/diameter_message2.dart';
-import '../../core/avp_dictionary.dart';
+import '../../core/diameter_message3.dart';
+import '../../core/avp_dictionary2.dart';
 
 class CapabilitiesExchangeRequest extends DiameterMessage {
   CapabilitiesExchangeRequest({

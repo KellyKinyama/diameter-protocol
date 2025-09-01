@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
 import 'dart:typed_data';
-import 'diameter_message2.dart';
+import 'diameter_message3.dart';
 import '../applications/base/watchdog.dart';
 import '../applications/base/re_auth.dart';
 import 'avp_dictionary.dart';
@@ -78,7 +78,7 @@ class DiameterClient {
                 flags: DiameterMessage.FLAG_ERROR,
                 hopByHopId: message.hopByHopId,
                 endToEndId: message.endToEndId,
-                avpList: [
+                avps: [
                   AVP.fromUnsigned32(
                     AVP_RESULT_CODE,
                     DIAMETER_COMMAND_UNSUPPORTED,

@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'dart:async';
-import 'diameter_message2.dart';
+import 'diameter_message3.dart';
 import '../applications/session_management.dart';
 
 class DiameterServer {
