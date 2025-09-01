@@ -146,6 +146,330 @@ const APP_ID_SIP = 6;
 const APP_ID_S6A = 16777251; // 3GPP
 
 // --- Maps for pretty printing ---
+// const Map<int, String> COMMAND_CODE_TO_NAME = {
+//   CMD_AA_REQUEST: "AA-Request/Answer",
+//   CMD_CAPABILITIES_EXCHANGE: "Capabilities-Exchange",
+//   CMD_DEVICE_WATCHDOG: "Device-Watchdog",
+//   CMD_DISCONNECT_PEER: "Disconnect-Peer",
+//   CMD_RE_AUTH: "Re-Auth",
+//   CMD_SESSION_TERMINATION: "Session-Termination",
+//   CMD_ABORT_SESSION: "Abort-Session",
+//   CMD_ACCOUNTING: "Accounting",
+//   CMD_CREDIT_CONTROL: "Credit-Control",
+//   CMD_DIAMETER_EAP: "Diameter-EAP",
+//   CMD_USER_AUTHORIZATION: "User-Authorization",
+//   CMD_SERVER_ASSIGNMENT: "Server-Assignment",
+//   CMD_LOCATION_INFO: "Location-Info",
+//   CMD_MULTIMEDIA_AUTH: "Multimedia-Auth",
+//   CMD_REGISTRATION_TERMINATION: "Registration-Termination",
+//   CMD_PUSH_PROFILE: "Push-Profile",
+// };
+
+// const Map<int, String> AVP_CODE_TO_NAME = {
+//   AVP_SESSION_ID: "Session-Id",
+//   AVP_ORIGIN_HOST: "Origin-Host",
+//   AVP_ORIGIN_REALM: "Origin-Realm",
+//   AVP_DESTINATION_REALM: "Destination-Realm",
+//   AVP_DESTINATION_HOST: "Destination-Host",
+//   AVP_AUTH_APPLICATION_ID: "Auth-Application-Id",
+//   AVP_ACCT_APPLICATION_ID: "Acct-Application-Id",
+//   AVP_RESULT_CODE: "Result-Code",
+//   AVP_PRODUCT_NAME: "Product-Name",
+//   AVP_VENDOR_ID: "Vendor-Id",
+//   AVP_FIRMWARE_REVISION: "Firmware-Revision",
+//   AVP_HOST_IP_ADDRESS: "Host-IP-Address",
+//   AVP_CC_REQUEST_TYPE: "CC-Request-Type",
+//   AVP_CC_REQUEST_NUMBER: "CC-Request-Number",
+//   AVP_USED_SERVICE_UNIT: "Used-Service-Unit",
+//   AVP_REQUESTED_SERVICE_UNIT: "Requested-Service-Unit",
+//   AVP_GRANTED_SERVICE_UNIT: "Granted-Service-Unit",
+//   AVP_CC_TOTAL_OCTETS: "CC-Total-Octets",
+//   AVP_EAP_PAYLOAD: "EAP-Payload",
+//   AVP_USER_PASSWORD: "User-Password",
+//   AVP_FRAMED_IP_ADDRESS: "Framed-IP-Address",
+//   AVP_SIP_AOR: "SIP-AOR",
+//   AVP_SIP_SERVER_URI: "SIP-Server-URI",
+//   AVP_FINAL_UNIT_INDICATION: "Final-Unit-Indication",
+//   // Add other key AVPs here as needed for good logging
+// };
+
+// --- Result-Code AVP Values ---
+// const DIAMETER_SUCCESS = 2001;
+// const DIAMETER_MULTI_ROUND_AUTH = 1001;
+// const DIAMETER_COMMAND_UNSUPPORTED = 3001;
+// const DIAMETER_UNABLE_TO_DELIVER = 3002;
+// const DIAMETER_AUTHORIZATION_REJECTED = 5003;
+const DIAMETER_INVALID_AVP_VALUE = 5004; // <-- ADD THIS LINE
+// const DIAMETER_MISSING_AVP = 5005;
+// const DIAMETER_UNKNOWN_SESSION_ID = 5002;
+// const DIAMETER_USER_UNKNOWN = 5030;
+// const DIAMETER_CREDIT_LIMIT_REACHED = 4012;
+// lib/core/avp_dictionary.dart
+
+// --- Vendor IDs ---
+const VENDOR_ID_3GPP = 10415;
+
+// --- AVP Codes ---
+// Base Protocol (RFC 6733)
+// const AVP_SESSION_ID = 263;
+// const AVP_ORIGIN_HOST = 264;
+// const AVP_ORIGIN_REALM = 296;
+// const AVP_DESTINATION_REALM = 283;
+// const AVP_DESTINATION_HOST = 293;
+// const AVP_AUTH_APPLICATION_ID = 258;
+// const AVP_ACCT_APPLICATION_ID = 259;
+// const AVP_RESULT_CODE = 268;
+const AVP_EXPERIMENTAL_RESULT_CODE = 298;
+// const AVP_PRODUCT_NAME = 269;
+// const AVP_VENDOR_ID = 266;
+// const AVP_FIRMWARE_REVISION = 267;
+// const AVP_HOST_IP_ADDRESS = 257;
+// const AVP_SUPPORTED_VENDOR_ID = 265;
+// const AVP_TERMINATION_CAUSE = 295;
+// const AVP_USER_NAME = 1;
+// const AVP_ORIGIN_STATE_ID = 278;
+// const AVP_ROUTE_RECORD = 282;
+// const AVP_DISCONNECT_CAUSE = 273;
+// const AVP_RE_AUTH_REQUEST_TYPE = 285;
+// const AVP_ACCOUNTING_RECORD_TYPE = 480;
+// const AVP_ACCOUNTING_RECORD_NUMBER = 485;
+// const AVP_ACCT_INTERIM_INTERVAL = 85;
+// const AVP_AUTH_REQUEST_TYPE = 274;
+// const AVP_STATE = 24;
+
+// Credit-Control (RFC 8506)
+// const AVP_CC_REQUEST_NUMBER = 415;
+// const AVP_CC_REQUEST_TYPE = 416;
+// const AVP_USED_SERVICE_UNIT = 446;
+// const AVP_GRANTED_SERVICE_UNIT = 431;
+// const AVP_CC_TOTAL_OCTETS = 421;
+// const AVP_FINAL_UNIT_INDICATION = 430;
+// const AVP_FINAL_UNIT_ACTION = 449;
+// const AVP_MULTIPLE_SERVICES_CREDIT_CONTROL = 456;
+// const AVP_SUBSCRIPTION_ID = 443;
+// const AVP_SUBSCRIPTION_ID_TYPE = 450;
+// const AVP_SUBSCRIPTION_ID_DATA = 444;
+
+// EAP Application (RFC 4072)
+// const AVP_EAP_PAYLOAD = 462;
+
+// NASREQ Application (RFC 7155)
+// const AVP_USER_PASSWORD = 2;
+// const AVP_FRAMED_IP_ADDRESS = 8;
+// const AVP_FILTER_ID = 11;
+
+// SIP Application (RFC 4740)
+// const AVP_SIP_AOR = 386;
+// const AVP_SIP_SERVER_URI = 371;
+
+// 3GPP Gx Application (TS 29.212) - All are Vendor-Specific
+const AVP_BEARER_USAGE = 1000;
+const AVP_CHARGING_RULE_INSTALL = 1001;
+const AVP_CHARGING_RULE_REMOVE = 1002;
+const AVP_CHARGING_RULE_DEFINITION = 1003;
+const AVP_CHARGING_RULE_BASE_NAME = 1004;
+const AVP_CHARGING_RULE_NAME = 1005;
+const AVP_EVENT_TRIGGER = 1006;
+const AVP_METERING_METHOD = 1007;
+const AVP_OFFLINE = 1008;
+const AVP_ONLINE = 1009;
+const AVP_PRECEDENCE = 1010;
+const AVP_REPORTING_LEVEL = 1011;
+const AVP_TFT_FILTER = 1012;
+const AVP_TFT_PACKET_FILTER_INFORMATION = 1013;
+const AVP_QOS_INFORMATION = 1016;
+const AVP_BEARER_IDENTIFIER = 1020;
+const AVP_BEARER_OPERATION = 1021;
+const AVP_IP_CAN_TYPE = 1027;
+const AVP_QOS_CLASS_IDENTIFIER = 1028;
+const AVP_SUPPORTED_FEATURES = 628; // From other 3GPP specs, often used
+
+// --- Command Codes ---
+// const CMD_AA_REQUEST = 265;
+// const CMD_CAPABILITIES_EXCHANGE = 257;
+// const CMD_DEVICE_WATCHDOG = 280;
+// const CMD_DISCONNECT_PEER = 282;
+// const CMD_RE_AUTH = 258;
+// const CMD_SESSION_TERMINATION = 275;
+// const CMD_ABORT_SESSION = 274;
+// const CMD_ACCOUNTING = 271;
+// const CMD_CREDIT_CONTROL = 272;
+// const CMD_DIAMETER_EAP = 268;
+// const CMD_USER_AUTHORIZATION = 283;
+// const CMD_SERVER_ASSIGNMENT = 284;
+// const CMD_LOCATION_INFO = 285;
+// const CMD_MULTIMEDIA_AUTH = 286;
+
+// --- Application IDs ---
+// const APP_ID_NASREQ = 1;
+// const APP_ID_BASE_ACCOUNTING = 3;
+// const APP_ID_CREDIT_CONTROL = 4;
+// const APP_ID_EAP = 5;
+// const APP_ID_SIP = 6;
+const APP_ID_3GPP_GX = 16777238;
+
+// --- Maps for pretty printing ---
+// const Map<int, String> COMMAND_CODE_TO_NAME = {
+//   CMD_AA_REQUEST: "AA-Request/Answer",
+//   CMD_CAPABILITIES_EXCHANGE: "Capabilities-Exchange",
+//   CMD_DEVICE_WATCHDOG: "Device-Watchdog",
+//   CMD_DISCONNECT_PEER: "Disconnect-Peer",
+//   CMD_RE_AUTH: "Re-Auth",
+//   CMD_SESSION_TERMINATION: "Session-Termination",
+//   CMD_ABORT_SESSION: "Abort-Session",
+//   CMD_ACCOUNTING: "Accounting",
+//   CMD_CREDIT_CONTROL: "Credit-Control",
+//   CMD_DIAMETER_EAP: "Diameter-EAP",
+//   CMD_USER_AUTHORIZATION: "User-Authorization",
+//   CMD_SERVER_ASSIGNMENT: "Server-Assignment",
+//   CMD_LOCATION_INFO: "Location-Info",
+//   CMD_MULTIMEDIA_AUTH: "Multimedia-Auth",
+// };
+
+// const Map<int, String> AVP_CODE_TO_NAME = {
+//   AVP_SESSION_ID: "Session-Id",
+//   AVP_ORIGIN_HOST: "Origin-Host",
+//   AVP_ORIGIN_REALM: "Origin-Realm",
+//   AVP_DESTINATION_REALM: "Destination-Realm",
+//   AVP_DESTINATION_HOST: "Destination-Host",
+//   AVP_AUTH_APPLICATION_ID: "Auth-Application-Id",
+//   AVP_ACCT_APPLICATION_ID: "Acct-Application-Id",
+//   AVP_RESULT_CODE: "Result-Code",
+//   AVP_PRODUCT_NAME: "Product-Name",
+//   AVP_VENDOR_ID: "Vendor-Id",
+//   AVP_FIRMWARE_REVISION: "Firmware-Revision",
+//   AVP_HOST_IP_ADDRESS: "Host-IP-Address",
+//   AVP_CC_REQUEST_TYPE: "CC-Request-Type",
+//   AVP_CC_REQUEST_NUMBER: "CC-Request-Number",
+//   AVP_USED_SERVICE_UNIT: "Used-Service-Unit",
+//   AVP_GRANTED_SERVICE_UNIT: "Granted-Service-Unit",
+//   AVP_CC_TOTAL_OCTETS: "CC-Total-Octets",
+//   AVP_EAP_PAYLOAD: "EAP-Payload",
+//   AVP_USER_PASSWORD: "User-Password",
+//   AVP_FRAMED_IP_ADDRESS: "Framed-IP-Address",
+//   AVP_SIP_AOR: "SIP-AOR",
+//   AVP_SIP_SERVER_URI: "SIP-Server-URI",
+//   AVP_FINAL_UNIT_INDICATION: "Final-Unit-Indication",
+//   AVP_CHARGING_RULE_INSTALL: "Charging-Rule-Install",
+//   AVP_CHARGING_RULE_DEFINITION: "Charging-Rule-Definition",
+//   AVP_CHARGING_RULE_NAME: "Charging-Rule-Name",
+//   AVP_IP_CAN_TYPE: "IP-CAN-Type",
+//   AVP_QOS_INFORMATION: "QoS-Information",
+//   AVP_QOS_CLASS_IDENTIFIER: "QoS-Class-Identifier",
+// };
+
+// --- Application IDs ---
+// const APP_ID_NASREQ = 1;
+// const APP_ID_BASE_ACCOUNTING = 3;
+// const APP_ID_CREDIT_CONTROL = 4; // Used for generic Gy
+// const APP_ID_EAP = 5;
+// const APP_ID_SIP = 6;
+// const APP_ID_3GPP_GX = 16777238;
+const APP_ID_3GPP_GY = 3; // Official 3GPP Gy/Ro Application ID
+// lib/core/avp_dictionary.dart
+
+// --- Vendor IDs ---
+// const VENDOR_ID_3GPP = 10415;
+
+// --- AVP Codes ---
+// Base Protocol (RFC 6733)
+// const AVP_SESSION_ID = 263;
+// const AVP_ORIGIN_HOST = 264;
+// const AVP_ORIGIN_REALM = 296;
+// const AVP_DESTINATION_REALM = 283;
+// const AVP_DESTINATION_HOST = 293;
+// const AVP_AUTH_APPLICATION_ID = 258;
+// const AVP_ACCT_APPLICATION_ID = 259;
+// const AVP_RESULT_CODE = 268;
+// const AVP_EXPERIMENTAL_RESULT_CODE = 298;
+// const AVP_PRODUCT_NAME = 269;
+// const AVP_VENDOR_ID = 266;
+// const AVP_FIRMWARE_REVISION = 267;
+// const AVP_HOST_IP_ADDRESS = 257;
+// const AVP_SUPPORTED_VENDOR_ID = 265;
+// const AVP_TERMINATION_CAUSE = 295;
+// const AVP_USER_NAME = 1;
+// const AVP_ORIGIN_STATE_ID = 278;
+// const AVP_ROUTE_RECORD = 282;
+// const AVP_DISCONNECT_CAUSE = 273;
+// const AVP_RE_AUTH_REQUEST_TYPE = 285;
+// const AVP_ACCOUNTING_RECORD_TYPE = 480;
+// const AVP_ACCOUNTING_RECORD_NUMBER = 485;
+// const AVP_ACCT_INTERIM_INTERVAL = 85;
+// const AVP_AUTH_REQUEST_TYPE = 274;
+// const AVP_STATE = 24;
+
+// Credit-Control (RFC 8506)
+// const AVP_CC_REQUEST_NUMBER = 415;
+// const AVP_CC_REQUEST_TYPE = 416;
+// const AVP_USED_SERVICE_UNIT = 446;
+// const AVP_GRANTED_SERVICE_UNIT = 431;
+// const AVP_CC_TOTAL_OCTETS = 421;
+// const AVP_FINAL_UNIT_INDICATION = 430;
+// const AVP_FINAL_UNIT_ACTION = 449;
+// const AVP_MULTIPLE_SERVICES_CREDIT_CONTROL = 456;
+// const AVP_SUBSCRIPTION_ID = 443;
+// const AVP_SUBSCRIPTION_ID_TYPE = 450;
+// const AVP_SUBSCRIPTION_ID_DATA = 444;
+
+// EAP Application (RFC 4072)
+// const AVP_EAP_PAYLOAD = 462;
+
+// NASREQ Application (RFC 7155)
+// const AVP_USER_PASSWORD = 2;
+// const AVP_FRAMED_IP_ADDRESS = 8;
+// const AVP_FILTER_ID = 11;
+
+// SIP Application (RFC 4740)
+// const AVP_SIP_AOR = 386;
+// const AVP_SIP_SERVER_URI = 371;
+
+// 3GPP Gx Application (TS 29.212)
+// const AVP_CHARGING_RULE_INSTALL = 1001;
+// const AVP_CHARGING_RULE_DEFINITION = 1003;
+// const AVP_CHARGING_RULE_NAME = 1005;
+// const AVP_IP_CAN_TYPE = 1027;
+// const AVP_QOS_INFORMATION = 1016;
+// const AVP_QOS_CLASS_IDENTIFIER = 1028;
+
+// 3GPP S6a Application (TS 29.272)
+const AVP_VISITED_PLMN_ID = 1407;
+const AVP_ULR_FLAGS = 1405;
+const AVP_RAT_TYPE = 1032;
+const AVP_SUBSCRIPTION_DATA = 1400;
+const AVP_AUTHENTICATION_INFO = 1413;
+const AVP_REQUESTED_EUTRAN_AUTHENTICATION_INFO = 1408;
+
+// --- Command Codes ---
+// const CMD_AA_REQUEST = 265;
+// const CMD_CAPABILITIES_EXCHANGE = 257;
+// const CMD_DEVICE_WATCHDOG = 280;
+// const CMD_DISCONNECT_PEER = 282;
+// const CMD_RE_AUTH = 258;
+// const CMD_SESSION_TERMINATION = 275;
+// const CMD_ABORT_SESSION = 274;
+// const CMD_ACCOUNTING = 271;
+// const CMD_CREDIT_CONTROL = 272;
+// const CMD_DIAMETER_EAP = 268;
+// const CMD_USER_AUTHORIZATION = 283;
+// const CMD_SERVER_ASSIGNMENT = 284;
+// const CMD_LOCATION_INFO = 285;
+// const CMD_MULTIMEDIA_AUTH = 286;
+// 3GPP S6a Commands (from RFC 5516)
+const CMD_UPDATE_LOCATION = 316;
+const CMD_AUTHENTICATION_INFORMATION = 318;
+
+// --- Application IDs ---
+// const APP_ID_NASREQ = 1;
+// const APP_ID_BASE_ACCOUNTING = 3;
+// const APP_ID_CREDIT_CONTROL = 4; // Also used for generic Gy
+// const APP_ID_EAP = 5;
+// const APP_ID_SIP = 6;
+// const APP_ID_3GPP_GX = 16777238;
+// const APP_ID_3GPP_GY = 3;
+const APP_ID_3GPP_S6A = 16777251;
+
+// --- Maps for pretty printing ---
 const Map<int, String> COMMAND_CODE_TO_NAME = {
   CMD_AA_REQUEST: "AA-Request/Answer",
   CMD_CAPABILITIES_EXCHANGE: "Capabilities-Exchange",
@@ -161,8 +485,8 @@ const Map<int, String> COMMAND_CODE_TO_NAME = {
   CMD_SERVER_ASSIGNMENT: "Server-Assignment",
   CMD_LOCATION_INFO: "Location-Info",
   CMD_MULTIMEDIA_AUTH: "Multimedia-Auth",
-  CMD_REGISTRATION_TERMINATION: "Registration-Termination",
-  CMD_PUSH_PROFILE: "Push-Profile",
+  CMD_UPDATE_LOCATION: "Update-Location",
+  CMD_AUTHENTICATION_INFORMATION: "Authentication-Information",
 };
 
 const Map<int, String> AVP_CODE_TO_NAME = {
@@ -172,35 +496,13 @@ const Map<int, String> AVP_CODE_TO_NAME = {
   AVP_DESTINATION_REALM: "Destination-Realm",
   AVP_DESTINATION_HOST: "Destination-Host",
   AVP_AUTH_APPLICATION_ID: "Auth-Application-Id",
-  AVP_ACCT_APPLICATION_ID: "Acct-Application-Id",
   AVP_RESULT_CODE: "Result-Code",
-  AVP_PRODUCT_NAME: "Product-Name",
-  AVP_VENDOR_ID: "Vendor-Id",
-  AVP_FIRMWARE_REVISION: "Firmware-Revision",
-  AVP_HOST_IP_ADDRESS: "Host-IP-Address",
+  AVP_USER_NAME: "User-Name",
   AVP_CC_REQUEST_TYPE: "CC-Request-Type",
   AVP_CC_REQUEST_NUMBER: "CC-Request-Number",
-  AVP_USED_SERVICE_UNIT: "Used-Service-Unit",
-  AVP_REQUESTED_SERVICE_UNIT: "Requested-Service-Unit",
-  AVP_GRANTED_SERVICE_UNIT: "Granted-Service-Unit",
-  AVP_CC_TOTAL_OCTETS: "CC-Total-Octets",
-  AVP_EAP_PAYLOAD: "EAP-Payload",
-  AVP_USER_PASSWORD: "User-Password",
-  AVP_FRAMED_IP_ADDRESS: "Framed-IP-Address",
-  AVP_SIP_AOR: "SIP-AOR",
-  AVP_SIP_SERVER_URI: "SIP-Server-URI",
-  AVP_FINAL_UNIT_INDICATION: "Final-Unit-Indication",
-  // Add other key AVPs here as needed for good logging
+  AVP_VISITED_PLMN_ID: "Visited-PLMN-Id",
+  AVP_RAT_TYPE: "RAT-Type",
+  AVP_ULR_FLAGS: "ULR-Flags",
+  AVP_SUBSCRIPTION_DATA: "Subscription-Data",
+  AVP_AUTHENTICATION_INFO: "Authentication-Info",
 };
-
-// --- Result-Code AVP Values ---
-// const DIAMETER_SUCCESS = 2001;
-// const DIAMETER_MULTI_ROUND_AUTH = 1001;
-// const DIAMETER_COMMAND_UNSUPPORTED = 3001;
-// const DIAMETER_UNABLE_TO_DELIVER = 3002;
-// const DIAMETER_AUTHORIZATION_REJECTED = 5003;
-const DIAMETER_INVALID_AVP_VALUE = 5004; // <-- ADD THIS LINE
-// const DIAMETER_MISSING_AVP = 5005;
-// const DIAMETER_UNKNOWN_SESSION_ID = 5002;
-// const DIAMETER_USER_UNKNOWN = 5030;
-// const DIAMETER_CREDIT_LIMIT_REACHED = 4012;

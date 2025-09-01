@@ -8,6 +8,8 @@ import 'base/capabilities_exchange.dart';
 import 'base/disconnect_peer.dart';
 // import 'base/watchdog.dart';
 import 'base/watchdog2.dart';
+import 'gx/gx.dart';
+import 's6a/s6a.dart';
 import 'session_management.dart';
 import 'base/accounting.dart';
 import 'credit_control/credit_control4.dart';
@@ -62,10 +64,49 @@ class DiameterSessionManager {
       case CMD_MULTIMEDIA_AUTH:
         return _handleMAR(request);
 
+      // --- S6a Application ---
+      case CMD_UPDATE_LOCATION:
+        return _handleULR(request);
+      case CMD_AUTHENTICATION_INFORMATION:
+        return _handleAIR(request);
+
       // --- Default for unsupported commands ---
       default:
         return createErrorResponse(request, DIAMETER_COMMAND_UNSUPPORTED);
     }
+  }
+  // --- S6a Handler Implementations ---
+
+  /// Handles an S6a Update-Location-Request
+  DiameterMessage _handleULR(DiameterMessage ulr) {
+    print(" S6a: Handling Update-Location-Request (ULR)");
+    final imsi = utf8.decode(ulr.getAVP(AVP_USER_NAME)!.data!);
+    print("   -> For IMSI: $imsi");
+
+    // In a real HSS, you would find the user's subscription data.
+    // Here we just return a success with an empty Subscription-Data AVP.
+    return UpdateLocationAnswer.fromRequest(
+      ulr,
+      resultCode: DIAMETER_SUCCESS,
+      originHost: originHost,
+      originRealm: originRealm,
+    );
+  }
+
+  /// Handles an S6a Authentication-Information-Request
+  DiameterMessage _handleAIR(DiameterMessage air) {
+    print(" S6a: Handling Authentication-Information-Request (AIR)");
+    final imsi = utf8.decode(air.getAVP(AVP_USER_NAME)!.data!);
+    print("   -> For IMSI: $imsi");
+    
+    // In a real HSS, you would generate real authentication vectors.
+    // Here we just return a success with an empty Authentication-Info AVP.
+    return AuthenticationInformationAnswer.fromRequest(
+      air,
+      resultCode: DIAMETER_SUCCESS,
+      originHost: originHost,
+      originRealm: originRealm,
+    );
   }
 
   // --- Handler Implementations ---
@@ -133,25 +174,140 @@ class DiameterSessionManager {
     );
   }
 
+  // DiameterMessage _handleCCR(DiameterMessage ccr) {
+  //   final sessionId = utf8.decode(ccr.getAVP(AVP_SESSION_ID)!.data!);
+  //   final requestTypeAvp = ccr.getAVP(AVP_CC_REQUEST_TYPE);
+  //   if (requestTypeAvp == null || requestTypeAvp.data == null) {
+  //     return createErrorResponse(ccr, DIAMETER_MISSING_AVP);
+  //   }
+  //   final requestType = ByteData.view(requestTypeAvp.data!.buffer).getUint32(0);
+
+  //   // Initial Request
+  //   if (requestType == 1) {
+  //     // INITIAL_REQUEST
+  //     if (!sessions.containsKey(sessionId)) {
+  //       sessions[sessionId] = DiameterSession(
+  //         sessionId: sessionId,
+  //         credit: 5000,
+  //       );
+  //       print(
+  //         '💳 New Credit-Control session created: $sessionId with 5000 units',
+  //       );
+  //     }
+  //     final session = sessions[sessionId]!;
+  //     return CreditControlAnswer.fromRequest(
+  //       ccr,
+  //       resultCode: DIAMETER_SUCCESS,
+  //       originHost: originHost,
+  //       originRealm: originRealm,
+  //       grantedUnits: session.credit, // Grant initial units
+  //     );
+  //   }
+
+  //   // Update Request
+  //   if (requestType == 2) {
+  //     // UPDATE_REQUEST
+  //     final session = sessions[sessionId];
+  //     if (session == null) {
+  //       return createErrorResponse(ccr, DIAMETER_UNKNOWN_SESSION_ID);
+  //     }
+
+  //     final used = ccr.getAVP(AVP_USED_SERVICE_UNIT);
+  //     if (used != null) {
+  //       // In a real implementation, you'd parse this and deduct from session.credit
+  //       print(
+  //         "💳 CCR-Update: Client reported usage. Session credit remaining: ${session.credit}",
+  //       );
+  //     }
+
+  //     // Simulate exhausting credit
+  //     session.credit = 0;
+  //     print(
+  //       "🔴 Credit exhausted for session $sessionId. Sending Final-Unit-Indication.",
+  //     );
+  //     return CreditControlAnswer.fromRequest(
+  //       ccr,
+  //       resultCode: DIAMETER_SUCCESS,
+  //       originHost: originHost,
+  //       originRealm: originRealm,
+  //       grantedUnits: 0,
+  //       isFinalUnit: true,
+  //     );
+  //   }
+
+  //   // Termination Request
+  //   if (requestType == 3) {
+  //     // TERMINATION_REQUEST
+  //     if (sessions.containsKey(sessionId)) {
+  //       sessions.remove(sessionId);
+  //       print('💳 Session terminated and removed: $sessionId');
+  //     }
+  //     return CreditControlAnswer.fromRequest(
+  //       ccr,
+  //       resultCode: DIAMETER_SUCCESS,
+  //       originHost: originHost,
+  //       originRealm: originRealm,
+  //     );
+  //   }
+
+  //   return createErrorResponse(ccr, DIAMETER_INVALID_AVP_VALUE);
+  // }
+
   DiameterMessage _handleCCR(DiameterMessage ccr) {
-    final sessionId = utf8.decode(ccr.getAVP(AVP_SESSION_ID)!.data!);
-    final requestTypeAvp = ccr.getAVP(AVP_CC_REQUEST_TYPE);
-    if (requestTypeAvp == null || requestTypeAvp.data == null) {
+    // Determine the application from the Auth-Application-Id AVP
+    final authAppIdAvp = ccr.getAVP(AVP_AUTH_APPLICATION_ID);
+    if (authAppIdAvp == null || authAppIdAvp.data == null) {
       return createErrorResponse(ccr, DIAMETER_MISSING_AVP);
     }
-    final requestType = ByteData.view(requestTypeAvp.data!.buffer).getUint32(0);
+    final authAppId = ByteData.view(authAppIdAvp.data!.buffer).getUint32(0);
+
+    // Dispatch to the correct application handler
+    if (authAppId == APP_ID_3GPP_GX) {
+      return _handleGxCCR(ccr);
+    } else {
+      // Default to standard Credit-Control (Gy)
+      return _handleGyCCR(ccr);
+    }
+  }
+
+  /// Handles a Gx (3GPP Policy) Credit-Control-Request.
+  DiameterMessage _handleGxCCR(DiameterMessage ccr) {
+    print(" Gx: Handling Gx Policy Request");
+
+    // In a real PCRF, you would look up subscriber data, evaluate policies, etc.
+    // Here, we just install a static rule for demonstration.
+    final rule = ChargingRuleDefinition(
+      ruleName: "allow-all-traffic",
+      qci: 9, // Best effort
+      ratingGroup: 100,
+      precedence: 200,
+    );
+
+    return GxCreditControlAnswer.fromRequest(
+      ccr,
+      resultCode: DIAMETER_SUCCESS,
+      originHost: originHost,
+      originRealm: originRealm,
+      rulesToInstall: [rule],
+    );
+  }
+
+  /// Handles a Gy (IETF Credit-Control) Credit-Control-Request.
+  DiameterMessage _handleGyCCR(DiameterMessage ccr) {
+    print(" Gy: Handling Gy Online Charging Request");
+    final sessionId = utf8.decode(ccr.getAVP(AVP_SESSION_ID)!.data!);
+    final requestType = ByteData.view(
+      ccr.getAVP(AVP_CC_REQUEST_TYPE)!.data!.buffer,
+    ).getUint32(0);
 
     // Initial Request
     if (requestType == 1) {
-      // INITIAL_REQUEST
       if (!sessions.containsKey(sessionId)) {
         sessions[sessionId] = DiameterSession(
           sessionId: sessionId,
           credit: 5000,
         );
-        print(
-          '💳 New Credit-Control session created: $sessionId with 5000 units',
-        );
+        print('💳 New Gy session created: $sessionId with 5000 units');
       }
       final session = sessions[sessionId]!;
       return CreditControlAnswer.fromRequest(
@@ -159,31 +315,18 @@ class DiameterSessionManager {
         resultCode: DIAMETER_SUCCESS,
         originHost: originHost,
         originRealm: originRealm,
-        grantedUnits: session.credit, // Grant initial units
+        grantedUnits: session.credit,
       );
     }
 
     // Update Request
     if (requestType == 2) {
-      // UPDATE_REQUEST
       final session = sessions[sessionId];
-      if (session == null) {
+      if (session == null)
         return createErrorResponse(ccr, DIAMETER_UNKNOWN_SESSION_ID);
-      }
 
-      final used = ccr.getAVP(AVP_USED_SERVICE_UNIT);
-      if (used != null) {
-        // In a real implementation, you'd parse this and deduct from session.credit
-        print(
-          "💳 CCR-Update: Client reported usage. Session credit remaining: ${session.credit}",
-        );
-      }
-
-      // Simulate exhausting credit
-      session.credit = 0;
-      print(
-        "🔴 Credit exhausted for session $sessionId. Sending Final-Unit-Indication.",
-      );
+      session.credit = 0; // Simulate exhausting credit
+      print("🔴 Gy credit exhausted for session $sessionId. Sending FUI.");
       return CreditControlAnswer.fromRequest(
         ccr,
         resultCode: DIAMETER_SUCCESS,
@@ -196,10 +339,9 @@ class DiameterSessionManager {
 
     // Termination Request
     if (requestType == 3) {
-      // TERMINATION_REQUEST
       if (sessions.containsKey(sessionId)) {
         sessions.remove(sessionId);
-        print('💳 Session terminated and removed: $sessionId');
+        print('💳 Gy session terminated and removed: $sessionId');
       }
       return CreditControlAnswer.fromRequest(
         ccr,
