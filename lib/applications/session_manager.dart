@@ -98,7 +98,7 @@ class DiameterSessionManager {
     print(" S6a: Handling Authentication-Information-Request (AIR)");
     final imsi = utf8.decode(air.getAVP(AVP_USER_NAME)!.data!);
     print("   -> For IMSI: $imsi");
-    
+
     // In a real HSS, you would generate real authentication vectors.
     // Here we just return a success with an empty Authentication-Info AVP.
     return AuthenticationInformationAnswer.fromRequest(

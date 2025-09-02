@@ -1,8 +1,8 @@
 
 import 'dart:typed_data';
-import 'package:diameter_protocol/core/avp_dictionary.dart';
-import 'package:diameter_protocol/core/diameter_message.dart';
-import 'package:diameter_protocol/applications/credit_control/credit_control.dart';
+import 'package:diameter_protocol/core/avp_dictionary2.dart';
+import 'package:diameter_protocol/core/diameter_message3.dart';
+import 'package:diameter_protocol/applications/credit_control/credit_control4.dart';
 import 'package:diameter_protocol/applications/common_avps.dart';
 
 void main() {
@@ -15,7 +15,8 @@ void main() {
     originRealm: "mno.net",
     destinationRealm: "mvno.net",
     requestNumber: 952,
-    serviceContextId: "32251@3gpp.org" // This would be in the CCR constructor
+    // serviceContextId: "32251@3gpp.org", // This would be in the CCR constructor
+      usedOctets: 4000, // Report usage
   );
 
   // 1. Create the inner PS-Information grouped AVP

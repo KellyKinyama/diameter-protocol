@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import '../../core/diameter_message2.dart';
-import '../../core/avp_dictionary.dart';
+import '../../core/diameter_message3.dart';
+import '../../core/avp_dictionary2.dart';
 import '../base/capabilities_exchange.dart';
 
 class DiameterSessionManager {
@@ -54,7 +54,7 @@ class DiameterSessionManager {
       flags: 0, // Answer
       hopByHopId: air.hopByHopId,
       endToEndId: air.endToEndId,
-      avpList: [
+      avps: [
         air.getAVP(AVP_SESSION_ID)!,
         AVP.fromUnsigned32(AVP_RESULT_CODE, DIAMETER_SUCCESS),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),

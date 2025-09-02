@@ -4,9 +4,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
 import 'dart:typed_data';
-import 'diameter_message2.dart';
+import 'diameter_message3.dart';
 import '../applications/base/watchdog.dart';
-import 'avp_dictionary.dart';
+import 'avp_dictionary2.dart';
 
 class DiameterClient {
   final String host;

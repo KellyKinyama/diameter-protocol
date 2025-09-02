@@ -2,6 +2,7 @@
 
 import '../../core/avp_dictionary2.dart';
 import '../../core/diameter_message3.dart';
+import 'hss_service.dart';
 
 /// Creates an S6a Update-Location-Request (ULR) message.
 class UpdateLocationRequest extends DiameterMessage {
@@ -108,16 +109,47 @@ class AuthenticationInformationRequest extends DiameterMessage {
 }
 
 /// Creates an S6a Authentication-Information-Answer (AIA) message.
+// class AuthenticationInformationAnswer extends DiameterMessage {
+//   AuthenticationInformationAnswer.fromRequest(
+//     DiameterMessage request, {
+//     required int resultCode,
+//     required String originHost,
+//     required String originRealm,
+//   }) : super.fromFields(
+//          commandCode: CMD_AUTHENTICATION_INFORMATION,
+//          applicationId: request.applicationId,
+//          flags: DiameterMessage.FLAG_PROXYABLE, // Answer
+//          hopByHopId: request.hopByHopId,
+//          endToEndId: request.endToEndId,
+//          avps: [
+//            request.getAVP(AVP_SESSION_ID)!,
+//            AVP.fromUnsigned32(AVP_RESULT_CODE, resultCode),
+//            AVP.fromUnsigned32(AVP_VENDOR_ID, VENDOR_ID_3GPP),
+//            AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, APP_ID_3GPP_S6A),
+//            AVP.fromString(AVP_ORIGIN_HOST, originHost),
+//            AVP.fromString(AVP_ORIGIN_REALM, originRealm),
+//            // In a real HSS, this would be populated with actual authentication vectors (RAND, AUTN, XRES, KASME)
+//            AVP.fromGrouped(
+//              AVP_AUTHENTICATION_INFO,
+//              [],
+//              vendorId: VENDOR_ID_3GPP,
+//            ),
+//          ],
+//        );
+// }
+
+/// Creates an S6a Authentication-Information-Answer (AIA) message.
 class AuthenticationInformationAnswer extends DiameterMessage {
   AuthenticationInformationAnswer.fromRequest(
     DiameterMessage request, {
     required int resultCode,
     required String originHost,
     required String originRealm,
+    AuthenticationVector? authVector, // Now accepts a data object
   }) : super.fromFields(
          commandCode: CMD_AUTHENTICATION_INFORMATION,
          applicationId: request.applicationId,
-         flags: DiameterMessage.FLAG_PROXYABLE, // Answer
+         flags: DiameterMessage.FLAG_PROXYABLE,
          hopByHopId: request.hopByHopId,
          endToEndId: request.endToEndId,
          avps: [
@@ -127,12 +159,36 @@ class AuthenticationInformationAnswer extends DiameterMessage {
            AVP.fromUnsigned32(AVP_AUTH_APPLICATION_ID, APP_ID_3GPP_S6A),
            AVP.fromString(AVP_ORIGIN_HOST, originHost),
            AVP.fromString(AVP_ORIGIN_REALM, originRealm),
-           // In a real HSS, this would be populated with actual authentication vectors (RAND, AUTN, XRES, KASME)
-           AVP.fromGrouped(
-             AVP_AUTHENTICATION_INFO,
-             [],
-             vendorId: VENDOR_ID_3GPP,
-           ),
+           // If successful, populate the Authentication-Info AVP with vectors
+           if (resultCode == DIAMETER_SUCCESS && authVector != null)
+             AVP.fromGrouped(AVP_AUTHENTICATION_INFO, [
+               AVP.fromGrouped(
+                 1414, // E-UTRAN-Vector
+                 [
+                   AVP(
+                     code: 1415,
+                     data: authVector.rand,
+                     vendorId: VENDOR_ID_3GPP,
+                   ), // RAND
+                   AVP(
+                     code: 1416,
+                     data: authVector.xres,
+                     vendorId: VENDOR_ID_3GPP,
+                   ), // XRES
+                   AVP(
+                     code: 1417,
+                     data: authVector.autn,
+                     vendorId: VENDOR_ID_3GPP,
+                   ), // AUTN
+                   AVP(
+                     code: 1418,
+                     data: authVector.kasme,
+                     vendorId: VENDOR_ID_3GPP,
+                   ), // KASME
+                 ],
+                 vendorId: VENDOR_ID_3GPP,
+               ),
+             ], vendorId: VENDOR_ID_3GPP),
          ],
        );
 }

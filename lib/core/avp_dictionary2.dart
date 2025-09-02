@@ -505,4 +505,5 @@ const Map<int, String> AVP_CODE_TO_NAME = {
   AVP_ULR_FLAGS: "ULR-Flags",
   AVP_SUBSCRIPTION_DATA: "Subscription-Data",
   AVP_AUTHENTICATION_INFO: "Authentication-Info",
+  AVP_VENDOR_ID: "Vendor_Id",
 };

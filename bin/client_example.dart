@@ -2,15 +2,15 @@
 
 import 'dart:typed_data';
 
-import 'package:diameter_protocol/applications/base/accounting.dart';
+// import 'package:diameter_protocol/applications/base/accounting.dart';
 import 'package:diameter_protocol/applications/base/capabilities_exchange.dart';
 import 'package:diameter_protocol/applications/base/disconnect_peer.dart';
-import 'package:diameter_protocol/applications/credit_control/credit_control3.dart';
+import 'package:diameter_protocol/applications/credit_control/credit_control4.dart';
 // import 'package:diameter_protocol/applications/credit_control/credit_control2.dart';
 import 'package:diameter_protocol/applications/session_management.dart';
-import 'package:diameter_protocol/core/avp_dictionary.dart';
+import 'package:diameter_protocol/core/avp_dictionary2.dart';
 import 'package:diameter_protocol/core/diameter_client2.dart';
-import 'package:diameter_protocol/core/diameter_message2.dart';
+// import 'package:diameter_protocol/core/diameter_message3.dart';
 
 // Future<void> main() async {
 //   final serverHost = '127.0.0.1';
@@ -246,6 +246,7 @@ Future<void> main() async {
     );
     final ccaInitial = await client.sendRequest(ccrInitial);
     print('✅ Received CCA-Initial, credit granted.');
+    print("$ccaInitial");
 
     // Simulate using the granted data
     await Future.delayed(Duration(seconds: 1));

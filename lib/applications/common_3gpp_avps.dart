@@ -1,5 +1,5 @@
-import '../core/diameter_message.dart';
-import '../core/avp_dictionary.dart';
+import '../core/diameter_message3.dart';
+import '../core/avp_dictionary2.dart';
 import 'dart:typed_data';
 
 // --- 3GPP Vendor ID ---

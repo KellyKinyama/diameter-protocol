@@ -1,7 +1,7 @@
 // bin/server_example.dart
 
 import 'package:diameter_protocol/core/diameter_server2.dart';
-import 'package:diameter_protocol/applications/session_management.dart';
+import 'package:diameter_protocol/applications/session_manager.dart';
 
 void main() async {
   final host = '127.0.0.1';

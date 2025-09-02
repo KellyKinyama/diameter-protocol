@@ -153,7 +153,9 @@ class DiameterSessionManager {
   }
 
   DiameterMessage _handleSTR(DiameterMessage str) {
-    final sessionId = String.fromCharCodes(str.getAVP(AVP_SESSION_ID)!.data!.toList());
+    final sessionId = String.fromCharCodes(
+      str.getAVP(AVP_SESSION_ID)!.data!.toList(),
+    );
     if (sessions.containsKey(sessionId)) {
       sessions.remove(sessionId);
       print('✅ Session terminated and removed: $sessionId');
@@ -167,7 +169,7 @@ class DiameterSessionManager {
       flags: 0,
       hopByHopId: str.hopByHopId,
       endToEndId: str.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromString(AVP_SESSION_ID, sessionId),
         AVP.fromUnsigned32(AVP_RESULT_CODE, 2001),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
@@ -187,7 +189,7 @@ class DiameterSessionManager {
       flags: DiameterMessage.FLAG_ERROR,
       hopByHopId: request.hopByHopId,
       endToEndId: request.endToEndId,
-      avpList: [
+      avps: [
         AVP.fromUnsigned32(AVP_RESULT_CODE, resultCode),
         AVP.fromString(AVP_ORIGIN_HOST, originHost),
         AVP.fromString(AVP_ORIGIN_REALM, originRealm),

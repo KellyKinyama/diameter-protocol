@@ -1,8 +1,9 @@
 // lib/core/diameter_message2.dart
 
+import 'dart:convert';
 import 'dart:typed_data';
 import 'diameter_avp.dart';
-// import 'avp_dictionary3.dart';
+import 'avp_dictionary.dart';
 import 'message_generator.dart';
 
 class DiameterMessage {
@@ -127,9 +128,11 @@ class DiameterMessage {
   @override
   String toString() {
     final avpStrings = avps.map((avp) => '    $avp').join('\n');
+    final commandName =
+        COMMAND_CODE_TO_NAME[commandCode] ?? commandCode.toString();
     return 'Diameter Message:\n'
         '  Version: $version, Length: $length, Flags: 0x${flags.toRadixString(16)}\n'
-        '  Command Code: $commandCode, Application ID: $applicationId\n'
+        '  Command Code: $commandName, Application ID: $applicationId\n'
         '  Hop-by-Hop ID: 0x${hopByHopId.toRadixString(16)}\n'
         '  End-to-End ID: 0x${endToEndId.toRadixString(16)}\n'
         '  AVPs:\n$avpStrings';
